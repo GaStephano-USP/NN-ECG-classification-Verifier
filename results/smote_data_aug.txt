@@ -1,0 +1,195 @@
+fold  1   
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      1.00      9059                                                                                                                                                       
+           1       0.92      0.89      0.91       278                                                                                                                                                       
+           2       0.97      0.98      0.98       724                                                                                                                                                       
+           3       0.92      0.83      0.87        81                                                                                                                                                       
+           4       1.00      0.99      1.00       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10946                                                                                                                                                       
+   macro avg       0.96      0.94      0.95     10946                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10946                                                                                                                                                       
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+fold  2                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      1.00      9059                                                                                                                                                       
+           1       0.95      0.86      0.90       278                                                                                                                                                       
+           2       0.98      0.97      0.98       724                                                                                                                                                       
+           3       0.87      0.89      0.88        81                                                                                                                                                       
+           4       1.00      1.00      1.00       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10946                                                                                                                                                       
+   macro avg       0.96      0.94      0.95     10946                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10946  
+
+
+
+fold  3                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      0.99      9059                                                                                                                                                       
+           1       0.95      0.89      0.92       278                                                                                                                                                       
+           2       0.98      0.97      0.97       724                                                                                                                                                       
+           3       0.83      0.78      0.80        81                                                                                                                                                       
+           4       1.00      0.99      1.00       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10946                                                                                                                                                       
+   macro avg       0.95      0.92      0.94     10946                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10946                                                                                                                                                       
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+fold  4                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      0.99      9059                                                                                                                                                       
+           1       0.91      0.88      0.89       278                                                                                                                                                       
+           2       0.97      0.96      0.97       724                                                                                                                                                       
+           3       0.89      0.82      0.86        80                                                                                                                                                       
+           4       1.00      0.99      0.99       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10945                                                                                                                                                       
+   macro avg       0.95      0.93      0.94     10945                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10945                                                                                                                                                       
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+fold  5                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      0.99      9059                                                                                                                                                       
+           1       0.92      0.89      0.90       278                                                                                                                                                       
+           2       0.98      0.96      0.97       724                                                                                                                                                       
+           3       0.88      0.84      0.86        80                                                                                                                                                       
+           4       1.00      0.99      0.99       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10945                                                                                                                                                       
+   macro avg       0.95      0.94      0.94     10945                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10945   
+
+
+fold  6                                                                                                                                                                                            [54/1344]
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      0.99      9059                                                                                                                                                       
+           1       0.88      0.89      0.89       278                                                                                                                                                       
+           2       0.97      0.96      0.97       724                                                                                                                                                       
+           3       0.86      0.81      0.83        80                                                                                                                                                       
+           4       1.00      0.99      0.99       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10945                                                                                                                                                       
+   macro avg       0.94      0.93      0.94     10945                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10945                                                                                                                                                       
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+fold  7                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      0.99      9059                                                                                                                                                       
+           1       0.92      0.88      0.90       278                                                                                                                                                       
+           2       0.98      0.97      0.98       723                                                                                                                                                       
+           3       0.88      0.80      0.84        80                                                                                                                                                       
+           4       0.99      0.99      0.99       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10944                                                                                                                                                       
+   macro avg       0.95      0.93      0.94     10944                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10944                                                                                                                                                       
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+                                                                                                                                                                                                            
+fold  8                                                                                                                                                                                                     
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().                                                                                                                                                                         
+  y = column_or_1d(y, warn=True)                                                                                                                                                                            
+              precision    recall  f1-score   support                                                                                                                                                       
+                                                                                                                                                                                                            
+           0       0.99      1.00      1.00      9058                                                                                                                                                       
+           1       0.94      0.86      0.90       278                                                                                                                                                       
+           2       0.98      0.97      0.97       723                                                                                                                                                       
+           3       0.82      0.76      0.79        80                                                                                                                                                       
+           4       1.00      0.99      1.00       804                                                                                                                                                       
+                                                                                                                                                                                                            
+    accuracy                           0.99     10943                                                                                                                                                       
+   macro avg       0.95      0.92      0.93     10943                                                                                                                                                       
+weighted avg       0.99      0.99      0.99     10943                                                                                                                                                       
+                                                      
+
+
+fold  9
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      1.00      9058
+           1       0.93      0.88      0.91       278
+           2       0.98      0.97      0.98       723
+           3       0.87      0.81      0.84        80
+           4       1.00      0.99      1.00       804
+
+    accuracy                           0.99     10943
+   macro avg       0.95      0.93      0.94     10943
+weighted avg       0.99      0.99      0.99     10943
+
+
+
+
+fold  10
+/home/jkozal/paris_env/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_sam
+ples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00      9058
+           1       0.95      0.92      0.94       277
+           2       0.99      0.98      0.99       723
+           3       0.86      0.82      0.84        80
+           4       0.99      1.00      0.99       803
+
+    accuracy                           0.99     10941
+   macro avg       0.96      0.94      0.95     10941
+weighted avg       0.99      0.99      0.99     10941
+
+
+
+
+avrg results for all folds:
+acc
+0.990195962381437
+precision
+[0.99358259 0.92696933 0.97840242 0.86678056 0.99516035]
+0.9521790523474808
+recall
+[0.99631296 0.8845038  0.96932173 0.81688272 0.99390516]
+0.9321852752244144
+f1
+[0.99494555 0.90504489 0.97383117 0.84084601 0.99452593]
+0.9418387120430631
