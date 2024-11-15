@@ -1,0 +1,25 @@
+general:
+  root_path: ../safety_benchmarks/benchmarks/smote_data_aug
+  csv_name: smote_data_aug_instances.csv
+# data: 
+#   num_outputs: 5
+solver:
+  batch_size: 512 # depends on the size of my model and properties needed to be verified
+#   beta-crown:
+#     lr_alpha: 0.05
+#     lr_beta: 0.1 # Lowering lr is best for optimal results (bad: slower)
+#     iteration: 5
+#   alpha-crown:
+#     lr_alpha: 0.25
+#     iteration: 20
+#     full_conv_alpha: False
+#   prune_after_crown: True
+# bab:
+#   initial_max_domains: 100
+#   branching:
+#     method: kfsb # between kfsb (balanced) and fsb (precised but slow)
+#     candidates: 7
+#     reduceop: max
+#   interm_transfer: False
+# attack:
+#   pgd_order: skip
