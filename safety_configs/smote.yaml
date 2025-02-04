@@ -1,6 +1,7 @@
 general:
   root_path: ../../safetyartist_benchmarks/benchmarks/smote
   csv_name: instances.csv
+  conv_mode: matrix
 # data: 
 #   num_outputs: 5
 solver:
