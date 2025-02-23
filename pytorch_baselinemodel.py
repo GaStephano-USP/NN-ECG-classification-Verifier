@@ -47,7 +47,7 @@ class ResNet1D(nn.Module):
     def __init__(self, num_classes=5):
         kernel_size = 5
         super(ResNet1D, self).__init__()
-        self.conv1 = nn.Conv1d(1, 32, kernel_size=kernel_size, stride=1, padding=kernel_size//2)
+        self.conv1 = nn.Conv1d(1, 32, kernel_size=kernel_size, stride=1, padding=kernel_size//2) #padding="same" no Keras
         
         self.resblock1 = ResidualBlock1D(in_channels=32, out_channels=32)
         self.pool1 = nn.MaxPool1d(kernel_size=kernel_size, stride=2, padding=0)
@@ -76,7 +76,6 @@ class ResNet1D(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
         x = self.resblock1(x)
-        # print("Shape before pool1:", x.shape)
         x = self.pool1(x)
         x = self.resblock2(x)
         x = self.pool2(x)
@@ -87,7 +86,6 @@ class ResNet1D(nn.Module):
         x = self.resblock5(x)
         x = self.pool5(x)
         x = self.flatten(x)
-        # print("Shape before fc1:", x.shape)
         x = self.fc1(x)
         x = self.relu1(x)
         x = self.fc2(x)
@@ -134,13 +132,14 @@ for fold_number, (train_index, test_index) in enumerate(kf.split(x, y)):
         # sample and train model
     model.train()
     # Treinamento do modelo
-    epochs = 20  # Número de épocas
+    epochs = 100  # Número de épocas
     for epoch in range(epochs):
         total_loss = 0.0  # Reinicia a perda a cada época
         for X_batch, y_batch in train_loader:
             X_batch, y_batch = X_batch.to(device), y_batch.to(device)  # Move para GPU/CPU
 
             optimizer.zero_grad()
+            # Keras utiliza (N, L, C) Pytorch (N, C, L)
             X_batch = X_batch.permute(0, 2, 1)
             # print("Input Shape:", X_batch.shape)
             outputs = model(X_batch)
