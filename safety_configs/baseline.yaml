@@ -1,25 +1,11 @@
 general:
-  root_path: ../safety_benchmarks/benchmarks/baseline
-  csv_name: baseline_instances.csv
-# data: 
-#   num_outputs: 5
+  root_path: ../safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
+  csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
+model:
+  name: baseline_model
+  path: ../safety_benchmarks/benchmarks/baseline/pytorch/baseline_pytorch_model.pth  # Path to PyTorch checkpoint.
+  input_shape: [-1, 1, 187] # The vnnlib does not have input shape information, user should specify here.
 solver:
-  batch_size: 512 # depends on the size of my model and properties needed to be verified
-#   beta-crown:
-#     lr_alpha: 0.05
-#     lr_beta: 0.1 # Lowering lr is best for optimal results (bad: slower)
-#     iteration: 5
-#   alpha-crown:
-#     lr_alpha: 0.25
-#     iteration: 20
-#     full_conv_alpha: False
-#   prune_after_crown: True
-# bab:
-#   initial_max_domains: 100
-#   branching:
-#     method: kfsb # between kfsb (balanced) and fsb (precised but slow)
-#     candidates: 7
-#     reduceop: max
-#   interm_transfer: False
-# attack:
-#   pgd_order: skip
+  batch_size: 512 # Number of subdomains to compute in parallel in bound solver. Decrease if you run out of memory.
+bab:
+  timeout: 120  # Timeout threshold for branch and bound. Increase for verifying more points.
