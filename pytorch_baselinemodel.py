@@ -152,3 +152,4 @@ for fold_number, (train_index, test_index) in enumerate(kf.split(x, y)):
 
         print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(train_loader):.4f}")
 model_scripted.save('baseline_pytorch_model_.pt')
+torch.save(model.state_dict(), "baseline_pytorch_model.pth")

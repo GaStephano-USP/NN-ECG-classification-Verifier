@@ -4,8 +4,14 @@ general:
 model:
   name: baseline_model
   path: ../safety_benchmarks/benchmarks/baseline/pytorch/baseline_pytorch_model.pth  # Path to PyTorch checkpoint.
-  input_shape: [-1, 1, 187] # The vnnlib does not have input shape information, user should specify here.
+  input_shape: [-1, 1, 187, 1] # The vnnlib does not have input shape information, user should specify here.
+data:
+  dataset: MITBIH
+  start: 0
+  end: 100
 solver:
   batch_size: 512 # Number of subdomains to compute in parallel in bound solver. Decrease if you run out of memory.
 bab:
   timeout: 120  # Timeout threshold for branch and bound. Increase for verifying more points.
+attack:
+  pgd_order: skip
