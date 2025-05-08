@@ -1,0 +1,23 @@
+model:
+  name: med_mnist_model
+  path: ../safety_benchmarks/benchmarks/med_mnist/pytorch/med_mnist_model.pth  # Path to PyTorch checkpoint.
+data:
+  dataset: MNIST_SDP # change to MED_MNIST later
+specification:
+  epsilon: 0.3
+attack:
+  pgd_restarts: 50
+solver:
+  batch_size: 4096 # 1024
+  beta-crown:
+    iteration: 20 # 20
+    lr_beta: 0.005 # 0.05
+bab:
+  timeout: 200 # 180
+  branching:
+    reduceop: max
+  cut:
+    enabled: True
+    cplex_cuts: True
+    bab_cut: True
+    lr_decay: 0.9

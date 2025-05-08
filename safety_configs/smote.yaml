@@ -1,4 +1,5 @@
 general:
+  device: cpu
   root_path: ../../safetyartist_benchmarks/benchmarks/smote
   csv_name: instances.csv
   conv_mode: matrix

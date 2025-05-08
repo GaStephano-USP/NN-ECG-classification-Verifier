@@ -2,7 +2,7 @@
 
 VERSION_STRING=v1
 if [[ -z "${SAFETYARTIST_PYTHON_PATH}" ]]; then
-	SAFETYARTIST_PYTHON_PATH=/home/stephano/miniconda3/envs/alpha-beta-crown/bin
+	SAFETYARTIST_PYTHON_PATH=/home/naninhavitorinha/miniconda3/envs/alpha-beta-crown/bin
 fi
 
 # check arguments

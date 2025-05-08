@@ -1,11 +1,10 @@
 general:
-  device: cpu
-  root_path: ../safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
+  root_path: ../safety_benchmarks/benchmarks/radimagenet  # Root path of the csv file.
   csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
-  name: baseline_model
-  path: ../safety_benchmarks/benchmarks/baseline/pytorch/model.pth  # Path to PyTorch checkpoint.
-  input_shape: [-1, 1, 187, 1] # The vnnlib does not have input shape information, user should specify here.
+  name: radimagenet_model
+  path: ../safety_benchmarks/benchmarks/radimagenet/pytorch/resnet50_torch.pt  # Path to PyTorch checkpoint.
+  input_shape: [1, 3, 224, 224] # The vnnlib does not have input shape information, user should specify here.
 data:
   dataset: MITBIH
   start: 0

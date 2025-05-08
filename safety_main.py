@@ -51,6 +51,12 @@ elif args.CATEGORY == "umce":
 elif args.CATEGORY == "acasxu": # left for testing
     cmd += "/safety_configs/acasxu.yaml"
 
+elif args.CATEGORY == "RadImageNet":
+    cmd += "/safety_configs/RadImageNet.yaml" 
+
+elif args.CATEGORY == "med_mnist":
+    cmd += "/safety_configs/med_mnist.yaml" 
+
 # elif args.CATEGORY == "test":
   #  pass
 
