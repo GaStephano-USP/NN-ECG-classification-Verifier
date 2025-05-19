@@ -6,6 +6,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 from medmnist import PneumoniaMNIST
 from medmnist import INFO
+# source: https://www.sciencedirect.com/science/article/pii/S1877050924015424
 class PneumoniaMNIST_CNN(nn.Module):
     def __init__(self):
         super(PneumoniaMNIST_CNN, self).__init__()
@@ -21,7 +22,7 @@ class PneumoniaMNIST_CNN(nn.Module):
         self.fc2 = nn.Linear(1000, 500)          # Layer 7 - FC Layer
         self.fc3 = nn.Linear(500, 50)            # Layer 8 - FC Layer
         self.fc4 = nn.Linear(50, 1)              # Layer 9 - FC Layer
-        self.softmax = nn.Softmax()
+       #self.softmax = nn.Softmax()   #É comentado no Artigo, porém não faz sentido na estrutura da rede
 
     def forward(self, x):
         x = F.relu(self.conv1(x))      # Layer 1
@@ -34,7 +35,7 @@ class PneumoniaMNIST_CNN(nn.Module):
         x = F.relu(self.fc2(x))        # Layer 7
         x = F.relu(self.fc3(x))        # Layer 8
         x = self.fc4(x)                # Layer 9
-        x = self.softmax(x)
+        #x = self.softmax(x)
         return x  
 
 # Download PneumoniaMNIST
