@@ -22,7 +22,7 @@ class PneumoniaMNIST_CNN(nn.Module):
         self.fc2 = nn.Linear(1000, 500)          # Layer 7 - FC Layer
         self.fc3 = nn.Linear(500, 50)            # Layer 8 - FC Layer
         self.fc4 = nn.Linear(50, 1)              # Layer 9 - FC Layer
-       #self.softmax = nn.Softmax()   #É comentado no Artigo, porém não faz sentido na estrutura da rede
+       #self.softmax = nn.Softmax()   #*in the original work it is mencioned a Softmax Layer, but it does not work in this architecture
 
     def forward(self, x):
         x = F.relu(self.conv1(x))      # Layer 1
