@@ -1,16 +1,33 @@
 general:
-  device: cpu #cuda
-  root_path: ../safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
+  # device: cpu #cpu
+  root_path: NN-ECG-classification-Verifier/safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
   csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   name: baseline_model
-  path: ../safety_benchmarks/benchmarks/baseline/pytorch/pytorch_model.pth  # Path to PyTorch checkpoint.
+  path: NN-ECG-classification-Verifier/safety_benchmarks/benchmarks/baseline/pytorch/pytorch_model.pth  # Path to PyTorch checkpoint.
   input_shape: [1, 1, 28, 28] # The vnnlib does not have input shape information, user should specify here.
-data:
-  dataset: MITBIH
-  start: 0
-  end: 100
+# data:
+#   dataset: MEDMNIST # Dataset name. This is just the standard MEDMNIST test set defined in the "load_verification_dataset()" function in utils.py
+#   mean: [0.4914, 0.4822, 0.4465]  # Mean for normalization.
+#   std: [0.2471, 0.2435, 0.2616]  # Std for normalization.
+#   start: 0  # First example to verify in dataset.
+#   end: 100  # Last example to verify in dataset. We verify 100 examples in this test.
+# specification:
+#   epsilon: 0.3
+# attack:
+#   pgd_restarts: 50
 solver:
-  batch_size: 512 # Number of subdomains to compute in parallel in bound solver. Decrease if you run out of memory.
+  batch_size: 1024
+  # bound_prop_method: alpha-crown # alpha-crown
+  # beta-crown:
+  #   iteration: 20 # 20
+  #   lr_beta: 0.005 # 0.05
 bab:
-  timeout: 120  # Timeout threshold for branch and bound. Increase for verifying more points.
+  timeout: 200 # 180
+  # branching:
+  #   reduceop: max
+  # cut:
+  #   enabled: True
+  #   cplex_cuts: True
+  #   bab_cut: True
+  #   lr_decay: 0.9

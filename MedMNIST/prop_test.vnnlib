@@ -2358,4 +2358,4 @@
 (assert (>= X_783 -10.0))
 ; Output bounds
 (assert (<= Y_0 1.0))
-(assert (>= Y_0 -1.0))
+(assert (>= Y_0 0.0))

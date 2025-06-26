@@ -83,3 +83,5 @@ for epoch in range(num_epochs):
         running_loss += loss.item()
 
     print(f"Epoch {epoch+1}/{num_epochs} - Loss: {running_loss:.4f}")
+
+torch.save(model.state_dict(), "pytorch_model.pth")  # Save the model state
