@@ -45,7 +45,7 @@ def train(model, device, train_loader, optimizer, epoch, display=True):
         loss = F.binary_cross_entropy_with_logits(output, target.float())
         loss.backward()
         optimizer.step()
-        torch.save(model.state_dict(), 'trained_models/FC_Net/FC_Net_{}.pth'.format(epoch))
+    torch.save(model.state_dict(), 'trained_models/FC_Net/FC_Net.pth'.format(epoch))
     if display:
       print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(data), len(train_loader.dataset), 100. * batch_idx / len(train_loader), loss.item()))
     return loss.item()

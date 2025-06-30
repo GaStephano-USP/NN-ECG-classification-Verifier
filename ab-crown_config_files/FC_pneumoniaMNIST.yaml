@@ -1,0 +1,26 @@
+general:
+  # device to run verifier
+  device: cpu 
+  # Complete verification verifier. 
+  # "bab": branch and bound with beta-CROWN; 
+  # "mip": mixed integer programming (MIP) formulation; 
+  # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
+  complete_verifier: bab
+model:
+  # name of the model (provided by library, see above)
+  name: mnist_6_100
+  # Load pretrained model from this specified path.
+  path: models/eran/mnist_6_100_nat.pth
+data:
+  # Dataset name. Dataset must be defined in utils.py.
+  dataset: MNIST_ERAN_UN
+  # Std vector used in data preprocessing.
+  std: [0.5]
+  # Mean vector used in data preprocessing.
+  mean: [0.5]
+solver:
+  alpha-crown:
+    iteration: 10
+attack:
+  # Early stop PGD when an adversarial example is found.
+  pgd_early_stop: true  
