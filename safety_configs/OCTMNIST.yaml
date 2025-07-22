@@ -1,0 +1,32 @@
+general:
+  # device to run verifier
+  # device: cpu 
+  # Complete verification verifier. 
+  # "bab": branch and bound with beta-CROWN; 
+  # "mip": mixed integer programming (MIP) formulation; 
+  # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
+  complete_verifier: bab
+  root_path: ./safety_benchmarks/benchmarks/FC_Net  # Root path of the csv file.
+  csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
+model:
+  # name of the model (provided by library, see above)
+  name: OCTMNIST_FC
+  # Load pretrained model from this specified path.
+  path: ./trained_models/OCT_FC_Net/OCT_FC_Net.pth
+  input_shape: [-1, 1, 28, 28]
+solver:
+  beta-crown:
+    iteration: 80
+    lr_beta: 0.2
+  mip:
+    parallel_solvers: 8
+    solver_threads: 4
+    refine_neuron_time_percentage: 0.8
+attack:
+  # Early stop PGD when an adversarial example is found.
+  pgd_order: skip
+  # pgd_early_stop: true 
+bab:
+  branching:
+    candidates: 5
+    reduceop: max

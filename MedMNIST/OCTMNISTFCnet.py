@@ -12,6 +12,9 @@ import numpy as np
 import random
 from numpy.random import RandomState
 from torch.utils.data import Subset
+from torch.autograd import Variable
+import copy
+
 class FullyConnected(nn.Module):  # inherits nn.Module
 
     def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
@@ -26,26 +29,55 @@ class FullyConnected(nn.Module):  # inherits nn.Module
         x = self.fc2(x)
         return x
 
+class EarlyStopping:
+    def __init__(self, patience=10, mode="max", delta=0.0):
+        self.patience = patience
+        self.mode = mode
+        self.delta = delta
+        self.best_score = None
+        self.counter = 0
+        self.early_stop = False
+        self.best_model_state = None
+
+    def __call__(self, score, model):
+        if self.best_score is None:
+            self.best_score = score
+            self.best_model_state = copy.deepcopy(model.state_dict())
+        elif (self.mode == "max" and score < self.best_score + self.delta) or \
+             (self.mode == "min" and score > self.best_score - self.delta):
+            self.counter += 1
+            print(f"EarlyStopping counter: {self.counter}/{self.patience}")
+            if self.counter >= self.patience:
+                self.early_stop = True
+        else:
+            self.best_score = score
+            self.best_model_state = copy.deepcopy(model.state_dict())
+            self.counter = 0
+
 
 # hyperparameters
 input_size = 784
-output_size = 1
+output_size = 4
 hidden_size = 50
 
-epochs = 20
+epochs = 1000
 batch_size = 50
-learning_rate = 0.00005
+learning_rate = 0.01
+loss_func = nn.CrossEntropyLoss()
+early_stopper = EarlyStopping(patience=10, mode="max")
 
 def train(model, device, train_loader, optimizer, epoch, display=True):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        optimizer.zero_grad()
+        
         output = model(data)
-        loss = F.binary_cross_entropy_with_logits(output, target.float())
+        optimizer.zero_grad()
+        target = target.squeeze().long()
+        loss = loss_func(output, target)
         loss.backward()
         optimizer.step()
-    torch.save(model.state_dict(), './trained_models/FC_Net/FC_Net.pth'.format(epoch))
+    torch.save(model.state_dict(), './trained_models/Fracture_FC_Net/Fracture_FC_Net.pth')
     if display:
       print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(data), len(train_loader.dataset), 100. * batch_idx / len(train_loader), loss.item()))
     return loss.item()
@@ -57,16 +89,16 @@ def test(model, device, test_loader, name="\nVal"):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += F.binary_cross_entropy_with_logits(output, target.float(), size_average=False).item() # sum up batch loss
-            print(output)
-            pred = output >= 0.5
-            correct += pred.eq(target.view_as(pred)).sum().item()
+            target = target.squeeze().long()
+            test_loss += loss_func(output, target).item() # sum up batch loss
+            pred = output.argmax(dim=1)
+            correct += pred.eq(target).sum().item()
 
     test_loss /= len(test_loader.dataset)
     print('{} set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(name, test_loss, correct, len(test_loader.dataset), 100. * correct / len(test_loader.dataset)))
     return 100. * correct / len(test_loader.dataset)
 # preprocessing
-data_flag = 'pneumoniamnist'
+data_flag = 'octmnist'
 
 download = True
 
@@ -95,34 +127,28 @@ seed = randint(0,50)
 
 # load the data
 train_dataset = DataClass(split='train', transform=data_transform, download=download)
-val_dataset = DataClass(split='train', transform=data_transform, download=download)
-prng = RandomState(seed)
-random_permute = prng.permutation(np.arange(0, 1000))
-train_top = 10//n_classes
-val_top = 1000//n_classes
-indx_train = np.concatenate([np.where(train_dataset.labels == label)[0][random_permute[0:train_top]] for label in range(0, n_classes)])
-indx_val = np.concatenate([np.where(train_dataset.labels == label)[0][random_permute[train_top:train_top + val_top]] for label in range(0, n_classes)])
+val_dataset = DataClass(split='val', transform=data_transform, download=download)
 
-train_data = Subset(train_dataset, indx_train)
-val_data = Subset(val_dataset, indx_val)
+print(f'Num Samples For Training: {len(train_dataset)}, Validation: {len(val_dataset)}')
 
-
-
-print('Num Samples For Training %d Num Samples For Val %d'%(train_data.indices.shape[0],val_data.indices.shape[0]))
-
-train_loader = torch.utils.data.DataLoader(train_data,
-                                                batch_size=32, 
-                                                shuffle=True)
-
-val_loader = torch.utils.data.DataLoader(val_data, batch_size=128, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 model = FullyConnected(input_size, output_size, hidden_size)
 model.to(device)
 
-optimizer = torch.optim.Adam(model.parameters(),lr=1e-3)
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum = 0.9)
 
-for epoch in range(50):
+for epoch in range(epochs):
     l = train(model, device, train_loader, optimizer, epoch, display=epoch%5==0)
     loss_val.append(l)
+    acc = test(model, device, val_loader)
+    accs_val.append(acc)
+    early_stopper(acc, model)
+    if early_stopper.early_stop:
+        print(f"Early stopping at epoch {epoch}")
+        break
 
-    accs_val.append(test(model, device, val_loader))
+model.load_state_dict(early_stopper.best_model_state)
+
+torch.save(model.state_dict(), './trained_models/Fracture_FC_Net/Fracture_FC_Net.pth')

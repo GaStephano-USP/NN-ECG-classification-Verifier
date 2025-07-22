@@ -1,6 +1,6 @@
 general:
   # device: cpu #cpu
-  root_path: NN-ECG-classification-Verifier/safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
+  root_path: ./safety_benchmarks/benchmarks/baseline  # Root path of the csv file.
   csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   name: baseline_model
