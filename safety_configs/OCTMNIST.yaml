@@ -5,7 +5,7 @@ general:
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
-  complete_verifier: bab
+  complete_verifier: mip
   root_path: ./safety_benchmarks/benchmarks/FC_Net  # Root path of the csv file.
   csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:

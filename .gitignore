@@ -1,3 +1,5 @@
 **/*.compiled
 **/*.log
 **/*.txt
+safety_benchmarks/benchmarks/FC_Net/vnnlib
+SMT properties/*

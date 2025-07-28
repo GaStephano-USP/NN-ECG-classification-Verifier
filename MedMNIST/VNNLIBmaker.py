@@ -7,7 +7,7 @@ from medmnist import INFO
 import numpy as np
 import os
 
-epsilon = 0.000000001
+epsilon = 0.01
 class OCTMNISTFC(nn.Module):  # inherits nn.Module
 
     def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
@@ -52,8 +52,8 @@ for i in range(len(dataset)):
         output = model(image_tensor)
         predicted = torch.argmax(output, dim=1).item()
     if predicted == label:
-        flattened_input = image_tensor.view(-1).numpy()
-        output_path_string = f"SMT properties/MedMNIST/OCTMNIST/Property_" + str(iterator) + ".vnnlib"
+        flattened_input = image_tensor.view(-1).cpu().numpy()
+        output_path_string = f"safety_benchmarks/benchmarks/FC_Net/vnnlib/OCTMNIST/Property_" + str(iterator) + ".vnnlib"
         output_path = os.path.abspath(output_path_string)
         iterator = iterator + 1
         try:
@@ -64,12 +64,19 @@ for i in range(len(dataset)):
                 for k in range(4):
                     f.write(f"(declare-const Y_{k} Real)\n")
                 for val in flattened_input:
-                    f.write(f"<= X_{n} {val+epsilon}\n")
-                    f.write(f">= X_{n} {val-epsilon}\n")
+                    f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
+                    f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
                     n = n + 1
                 for m in range(4):
                     if m != label:
-                        f.write(f"<= Y_{label} Y_{m}\n")
+                        f.write(f"(assert (<= Y_{label} Y_{m}))\n")
             print(f"Serialized input saved to: {output_path}")
         except Exception as e:
             print(f"Error writing file: {e}")
+output_path_instances = os.path.abspath("safety_benchmarks/benchmarks/FC_Net/instances.csv")
+try:
+    with open(output_path_instances, "w") as f:
+        for g in range(iterator):
+            f.write(f"vnnlib/OCTMNIST/Property_{g}.vnnlib\n")         
+except Exception as e:
+    print(f"Error writing file: {e}")
