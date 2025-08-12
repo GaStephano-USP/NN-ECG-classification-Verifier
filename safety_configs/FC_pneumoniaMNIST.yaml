@@ -1,18 +1,20 @@
 general:
   # device to run verifier
-  # device: cpu 
+  enable_incomplete_verification: true
+  save_adv_example: true
+  # device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
   complete_verifier: mip
-  root_path: ./safety_benchmarks/benchmarks/FC_Net  # Root path of the csv file.
+  root_path: ./safety_benchmarks/benchmarks/PneumoniaMNIST # Root path of the csv file.
   csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   # name of the model (provided by library, see above)
-  name: FC_Net
+  name: PneumoniaMNIST
   # Load pretrained model from this specified path.
-  path: ./trained_models/FC_Net/FC_Net.pth
+  path: ./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth
   input_shape: [-1, 1, 28, 28]
 solver:
   beta-crown:
@@ -24,8 +26,9 @@ solver:
     refine_neuron_time_percentage: 0.8
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: skip
-  # pgd_early_stop: true 
+  pgd_order: before
+  pgd_early_stop: true 
+  cex_path: ./safety_benchmarks/counterexamples/PneumoniaMNIST/PneumoniaMNIST.txt
 bab:
   branching:
     candidates: 5

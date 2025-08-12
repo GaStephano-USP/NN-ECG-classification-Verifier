@@ -1,10 +1,9 @@
 # inspired by https://www.kaggle.com/code/justuser/mnist-with-pytorch-fully-connected-network
 import torch
-import torch.nn as nn  # all neural network modules
-import torch.optim as optim  # optimization algo
-import torch.nn.functional as F  # Functions with no parameters -> activation functions
-from torch.utils.data import DataLoader  # easier dataset management, helps create mini batches
-import torchvision.datasets as datasets  # standard datasets
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import medmnist
 from medmnist import INFO, Evaluator

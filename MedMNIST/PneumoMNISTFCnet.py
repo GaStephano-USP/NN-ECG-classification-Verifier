@@ -34,7 +34,6 @@ hidden_size = 50
 
 epochs = 20
 batch_size = 50
-learning_rate = 0.00005
 
 def train(model, device, train_loader, optimizer, epoch, display=True):
     model.train()
@@ -45,7 +44,7 @@ def train(model, device, train_loader, optimizer, epoch, display=True):
         loss = F.binary_cross_entropy_with_logits(output, target.float())
         loss.backward()
         optimizer.step()
-    torch.save(model.state_dict(), './trained_models/FC_Net/FC_Net.pth'.format(epoch))
+    torch.save(model.state_dict(), './trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth')
     if display:
       print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(data), len(train_loader.dataset), 100. * batch_idx / len(train_loader), loss.item()))
     return loss.item()
@@ -58,8 +57,7 @@ def test(model, device, test_loader, name="\nVal"):
             data, target = data.to(device), target.to(device)
             output = model(data)
             test_loss += F.binary_cross_entropy_with_logits(output, target.float(), size_average=False).item() # sum up batch loss
-            print(output)
-            pred = output >= 0.5
+            pred = torch.sigmoid(output) > 0.5
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= len(test_loader.dataset)

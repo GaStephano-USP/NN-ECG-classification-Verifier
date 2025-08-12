@@ -1,6 +1,10 @@
 general:
+  # results_file: exp_1_out.txt
+  # save_adv_example: false
+  enable_incomplete_verification: true
+
   # device to run verifier
-  # device: cpu 
+  # device: cuda
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
@@ -22,10 +26,14 @@ solver:
     parallel_solvers: 8
     solver_threads: 4
     refine_neuron_time_percentage: 0.8
+    # early_stop: true
+    # adv_warmup: false
+    # mip_solver: gurobi
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: skip
-  # pgd_early_stop: true 
+  pgd_order: skip # skip, before or after
+  # pgd_early_stop: true
+  # cex_path: ./safety_benchmarks/counterexamples/OCTMINST_FC/cex.txt
 bab:
   branching:
     candidates: 5
