@@ -9,7 +9,7 @@ general:
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
   complete_verifier: mip
   root_path: ./safety_benchmarks/benchmarks/PneumoniaMNIST # Root path of the csv file.
-  csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
+  # csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   # name of the model (provided by library, see above)
   name: PneumoniaMNIST

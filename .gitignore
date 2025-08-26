@@ -4,3 +4,5 @@
 safety_benchmarks/benchmarks/FC_Net/vnnlib
 SMT properties/*
 **/*.vnnlib
+example_images/*
+**/*.csv

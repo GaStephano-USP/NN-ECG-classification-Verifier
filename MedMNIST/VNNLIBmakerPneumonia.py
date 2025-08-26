@@ -14,7 +14,7 @@ from PIL import Image
 # Pegar as propriedades mais robustas e aplicar artefatos de imagem específicos
 # OPCIONAL: Utilizar uma amostr0agem maior do dataset
 
-epsilon = 0.1505
+epsilon = 0.18
 class FullyConnected(nn.Module):  # inherits nn.Module
 
     def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
@@ -93,10 +93,10 @@ for i in range(len(dataset)):
             print(f"Serialized input saved to: {output_path}")
         except Exception as e:
             print(f"Error writing file: {e}")
-output_path_instances = os.path.abspath("safety_benchmarks/benchmarks/PneumoniaMNIST/instances.csv")
-try:
-    with open(output_path_instances, "w") as f:
-        for g in range(iterator):
+for g in range(iterator):
+    output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/PneumoniaMNIST/instances_{g}.csv")
+    try:
+        with open(output_path_instances, "w") as f:
             f.write(f"vnnlib/Property_{g}.vnnlib\n")         
-except Exception as e:
-    print(f"Error writing file: {e}")
+    except Exception as e:
+        print(f"Error writing file: {e}")

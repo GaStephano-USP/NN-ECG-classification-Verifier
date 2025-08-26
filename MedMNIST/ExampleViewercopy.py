@@ -4,7 +4,7 @@ import re
 # Executar gerador de propriedades com epsilon=0 antes
 for i in range(390):
     # Caminho para o arquivo
-    caminho_arquivo = f'safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_{i}.vnnlib'
+    caminho_arquivo = f'safety_benchmarks/benchmarks/FC_Net/vnnlib/OCTMNIST/Property_{i}.vnnlib'
     
     # Lista onde os valores de pixel serão armazenados
     valores_pixels = []
@@ -22,4 +22,4 @@ for i in range(390):
     
     # Cria e salva a imagem
     imagem = Image.fromarray(imagem_uint8, mode='L')
-    imagem.save(f'example_images/PneumoniaMNIST/imagem_reconstruida_original_{i}.png')
+    imagem.save(f'example_images/OCTMNIST/imagem_reconstruida_original_{i}.png')
