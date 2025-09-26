@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 import re
 # Executar gerador de propriedades com epsilon=0 antes
-for i in range(390):
+for i in range(504):
     # Caminho para o arquivo
     caminho_arquivo = f'safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_{i}.vnnlib'
     
@@ -13,9 +13,11 @@ for i in range(390):
     with open(caminho_arquivo, 'r') as f:
         for linha in f:
             if '>=' in linha:
-               linha = linha.strip()
-               valor = re.search(r"\d\.\d*", linha).group()
-               valores_pixels.append(float(valor.strip()))
+               if re.search(r"X", linha):
+                 linha = linha.strip()
+                 print(linha)
+                 valor = re.search(r"\d\.\d*", linha).group()
+                 valores_pixels.append(float(valor.strip()))
     # Converte os valores para imagem
     imagem_array = np.array(valores_pixels).reshape(28, 28)
     imagem_uint8 = (imagem_array * 255).astype(np.uint8)

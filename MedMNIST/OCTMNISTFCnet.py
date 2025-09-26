@@ -76,7 +76,7 @@ def train(model, device, train_loader, optimizer, epoch, display=True):
         loss = loss_func(output, target)
         loss.backward()
         optimizer.step()
-    torch.save(model.state_dict(), './trained_models/Fracture_FC_Net/Fracture_FC_Net.pth')
+    torch.save(model.state_dict(), './trained_models/OCT_FC_Net/OCT_FC_Net.pth')
     if display:
       print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(data), len(train_loader.dataset), 100. * batch_idx / len(train_loader), loss.item()))
     return loss.item()
@@ -107,7 +107,7 @@ DataClass = getattr(medmnist, info['python_class'])
 
 data_transform = transforms.Compose([
       transforms.ToTensor(),
-      transforms.Normalize(mean=[.5], std=[.5]),
+      # transforms.Normalize(mean=[.5], std=[.5]),
       ])
 
 use_cuda = torch.cuda.is_available()
@@ -127,11 +127,13 @@ seed = randint(0,50)
 # load the data
 train_dataset = DataClass(split='train', transform=data_transform, download=download)
 val_dataset = DataClass(split='val', transform=data_transform, download=download)
+test_dataset = DataClass(split='test', transform=data_transform, download=download)
 
 print(f'Num Samples For Training: {len(train_dataset)}, Validation: {len(val_dataset)}')
 
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
 model = FullyConnected(input_size, output_size, hidden_size)
 model.to(device)
@@ -150,4 +152,7 @@ for epoch in range(epochs):
 
 model.load_state_dict(early_stopper.best_model_state)
 
-torch.save(model.state_dict(), './trained_models/Fracture_FC_Net/Fracture_FC_Net.pth')
+acc_test = test(model, device, test_loader)
+print(acc_test*100)
+
+torch.save(model.state_dict(), './trained_models/OCT_FC_Net/OCT_FC_Net.pth')

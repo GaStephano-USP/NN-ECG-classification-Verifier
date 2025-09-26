@@ -9,15 +9,10 @@ import os
 import glob
 from PIL import Image
 
-# Testar variações de epsilons até encontrar "pontos chave" 100% - 99.9% - 95% - 70% - 50% - 20% - 5% - 0% (mais generalizado) (opcional: utilizar o epsilon multiplicativo)
-# Verificar se é possível salvar algum "contraexemplo"
-# Pegar as propriedades mais robustas e aplicar artefatos de imagem específicos
-# OPCIONAL: Utilizar uma amostr0agem maior do dataset
+epsilon = 0.04
+class FullyConnected(nn.Module):
 
-epsilon = 0.18
-class FullyConnected(nn.Module):  # inherits nn.Module
-
-    def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
+    def __init__(self, input_size, num_classes, hidden_size):
         super(FullyConnected, self).__init__()
         self.flatten = nn.Flatten()
         self.fc1 = nn.Linear(input_size, hidden_size)
@@ -42,18 +37,19 @@ model.eval()
 info = INFO['pneumoniamnist']
 DataClass = PneumoniaMNIST
 
-transform = transforms.Compose([
-    transforms.ToTensor(),  # [C,H,W] with values in [0, 1]
+transform = transforms.Compose([ 
+    transforms.ToTensor(),
 ])
 
 dataset = DataClass(split='test', transform=transform, download=True)
 iterator = 0
 folder_path_delete = "./safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib"
 compiled_files = glob.glob(os.path.join(folder_path_delete, "*.vnnlib.compiled"))
+#print('tamanho', len(dataset))
 for file_path in compiled_files:
     try:
         os.remove(file_path)
-        print(f"Deletado: {file_path}")
+        #print(f"Deletado: {file_path}")
     except Exception as e:
         print(f"Erro ao deletar {file_path}: {e}")
 for i in range(len(dataset)):
@@ -64,17 +60,11 @@ for i in range(len(dataset)):
         output = model(image_tensor)
         prob = torch.sigmoid(output)
         predicted = int(prob > 0.5)
+        #print('predicted:', predicted, 'prob:', prob.item(), 'label:', label, 'sample:', str(i))
     if predicted == label:
         flattened_input = image_tensor.view(-1).cpu().numpy()
         output_path_string = f"safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
         output_path = os.path.abspath(output_path_string)
-        if iterator == 389:
-            imagem_array = np.array(image_tensor.cpu()).reshape(28, 28)
-            imagem_uint8 = (imagem_array * 255).astype(np.uint8)
-
-            # Cria e salva a imagem
-            imagem = Image.fromarray(imagem_uint8, mode='L')
-            imagem.save('imagem_reconstruida_original.png')
         iterator = iterator + 1
         try:
             with open(output_path, "w") as f:
@@ -90,13 +80,21 @@ for i in range(len(dataset)):
                     f.write(f"(assert (>= Y_0 0))\n")
                 else:
                     f.write(f"(assert (<= Y_0 0))\n")
-            print(f"Serialized input saved to: {output_path}")
+            # print(f"Serialized input saved to: {output_path}")
         except Exception as e:
             print(f"Error writing file: {e}")
+#print(iterator)
 for g in range(iterator):
     output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/PneumoniaMNIST/instances_{g}.csv")
     try:
         with open(output_path_instances, "w") as f:
             f.write(f"vnnlib/Property_{g}.vnnlib\n")         
+    except Exception as e:
+        print(f"Error writing file: {e}")
+output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/PneumoniaMNIST/all_instances.csv")
+with open(output_path_instances, "w") as f:
+    try:
+        for j in range(iterator):
+            f.write(f"vnnlib/Property_{j}.vnnlib\n")         
     except Exception as e:
         print(f"Error writing file: {e}")

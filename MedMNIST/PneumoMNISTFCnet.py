@@ -74,7 +74,6 @@ DataClass = getattr(medmnist, info['python_class'])
 
 data_transform = transforms.Compose([
       transforms.ToTensor(),
-      transforms.Normalize(mean=[.5], std=[.5]),
       ])
 
 use_cuda = torch.cuda.is_available()

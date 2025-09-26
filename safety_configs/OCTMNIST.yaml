@@ -1,6 +1,6 @@
 general:
   # results_file: exp_1_out.txt
-  save_adv_example: true
+  save_adv_example: false
   enable_incomplete_verification: true
 
   # device to run verifier
@@ -10,8 +10,8 @@ general:
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
   complete_verifier: mip
-  root_path: ./safety_benchmarks/benchmarks/FC_Net  # Root path of the csv file.
-  # csv_name: instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
+  root_path: ./safety_benchmarks/benchmarks/FC_Net # Root path of the csv file.
+  csv_name: all_instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   # name of the model (provided by library, see above)
   name: OCTMNIST_FC
@@ -31,7 +31,7 @@ solver:
     # mip_solver: gurobi
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: before # skip, before or after
+  pgd_order: skip # skip, before or after
   pgd_early_stop: true
   # cex_path: ./safety_benchmarks/counterexamples/OCTMNIST_FC/OCTMNIST.txt
 bab:

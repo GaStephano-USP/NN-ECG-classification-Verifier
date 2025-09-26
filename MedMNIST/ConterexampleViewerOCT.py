@@ -3,7 +3,7 @@ import numpy as np
 import re
 # Caminho para o arquivo
 caminho_arquivo = 'safety_benchmarks/counterexamples/OCTMNIST_FC/OCTMNIST.txt'
-
+i = 0
 # Lista onde os valores de pixel serão armazenados
 valores_pixels = []
 

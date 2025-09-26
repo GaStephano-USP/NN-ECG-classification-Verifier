@@ -13,7 +13,7 @@ import glob
 # Pegar as propriedades mais robustas e aplicar artefatos de imagem específicos
 # OPCIONAL: Utilizar uma amostragem maior do dataset
 
-epsilon = 0.05
+epsilon = 0.010
 class OCTMNISTFC(nn.Module):  # inherits nn.Module
 
     def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
@@ -45,7 +45,8 @@ info = INFO['octmnist']
 DataClass = OCTMNIST
 
 transform = transforms.Compose([
-    transforms.ToTensor(),  # [C,H,W] with values in [0, 1]
+    transforms.ToTensor(),
+    # transforms.Normalize(mean=[.5], std=[.5])
 ])
 
 dataset = DataClass(split='test', transform=transform, download=True)
@@ -84,7 +85,7 @@ for i in range(len(dataset)):
                 for m in range(4):
                     if m != label:
                         f.write(f"(assert (<= Y_{label} Y_{m}))\n")
-            print(f"Serialized input saved to: {output_path}")
+            #print(f"Serialized input saved to: {output_path}")
         except Exception as e:
             print(f"Error writing file: {e}")
 for g in range(iterator):
@@ -94,3 +95,10 @@ for g in range(iterator):
            f.write(f"vnnlib/OCTMNIST/Property_{g}.vnnlib\n")         
     except Exception as e:
        print(f"Error writing file: {e}")
+output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/FC_Net/all_instances.csv")
+with open(output_path_instances, "w") as f:
+    try:
+        for j in range(iterator):
+            f.write(f"vnnlib/OCTMNIST/Property_{j}.vnnlib\n")         
+    except Exception as e:
+        print(f"Error writing file: {e}")
