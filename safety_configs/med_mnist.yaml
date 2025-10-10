@@ -4,7 +4,7 @@ model:
 data:
   dataset: MNIST_SDP # change to MED_MNIST later
 specification:
-  epsilon: 0.3
+  epsilon: 0.03
 attack:
   pgd_restarts: 50
 solver:
