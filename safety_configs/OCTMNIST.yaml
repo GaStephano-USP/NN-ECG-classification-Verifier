@@ -10,7 +10,7 @@ general:
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
   complete_verifier: mip
-  root_path: ./safety_benchmarks/benchmarks/FC_Net # Root path of the csv file.
+  root_path: ./safety_benchmarks/benchmarks/OCTMNIST # Root path of the csv file.
   csv_name: all_instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model:
   # name of the model (provided by library, see above)

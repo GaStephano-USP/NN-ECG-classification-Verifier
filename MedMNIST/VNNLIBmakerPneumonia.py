@@ -24,6 +24,7 @@ class FullyConnected(nn.Module):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
+
 def process_network(epsilon, mode):
     model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,10 +77,14 @@ def process_network(epsilon, mode):
                         f.write(f"(declare-const X_{j} Real)\n")
                     f.write(f"(declare-const Y_0 Real)\n")
                     for val in flattened_input:
-                        f.write(f"(assert (<= X_{n} {val+(epsilon*val)}))\n")
-                        f.write(f"(assert (>= X_{n} {val-(epsilon*val)}))\n")
+                        if mode == 'rel':
+                            f.write(f"(assert (<= X_{n} {val+(epsilon*val)}))\n")
+                            f.write(f"(assert (>= X_{n} {val-(epsilon*val)}))\n")
+                        elif mode == 'abs':
+                            f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
+                            f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
                         n = n + 1
-                    if label == 0:
+                    if  label == 0:
                         f.write(f"(assert (>= Y_0 0))\n")
                     else:
                         f.write(f"(assert (<= Y_0 0))\n")
@@ -105,13 +110,9 @@ def process_network(epsilon, mode):
 def main():
     parser = argparse.ArgumentParser(description='VNN spec generator',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--epsilon', type=float, default=0.03,
-                        help='Dimensao da perturbacaoo a ser adicionada')
-# Tarefas Clara 25/10/10
-# 1 - Adicionar novo argumento "modo" quando for passado "abs" o epsilon deve ser absoluto e quando for passado "rel" deve ser o valor relativo (em porcentagem)
-# 2 - Executar o Script "ABCrownPneumo.sh, resultando no arquivo resultados.txt, com os valores para criar o gráfico de variação do Epsilon"
-# 3 - Leitura dos códigos do generate_properties indicados (repositórios: https://github.com/apostovan21/vnncomp2023/blob/master/generate_properties.py https://github.com/ChristopherBrix/vnncomp2024_cifar100_benchmark/blob/main/generate_properties.py )
-    parser.add_argument('--mode', type=str, default=None,
+    parser.add_argument('--epsilon', type=float, default=None,
+                        help='Dimensao da perturbacao a ser adicionada')
+    parser.add_argument('--mode', type=str, default='abs',
                         help='The epsilon for L_infinity perturbation')
     args = parser.parse_args()
 
