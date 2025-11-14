@@ -9,12 +9,6 @@ import os
 import glob
 import argparse
 
-# Testar variações de epsilons até encontrar "pontos chave" 100% - 99.9% - 95% - 70% - 50% - 20% - 5% - 0% (mais generalizado) (opcional: utilizar o epsilon multiplicativo)
-# Verificar se é possível salvar algum "contraexemplo"
-# Pegar as propriedades mais robustas e aplicar artefatos de imagem específicos
-# OPCIONAL: Utilizar uma amostragem maior do dataset
-
-
 class OCTMNISTFC(nn.Module):  # inherits nn.Module
 
     def __init__(self, input_size, num_classes, hidden_size):  # input size = 28x28 = 784 for mnist
@@ -109,9 +103,9 @@ def main():
     parser = argparse.ArgumentParser(description='VNN spec generator',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--epsilon', type=float, default=None,
-                        help='Dimensao da perturbacao a ser adicionada')
+                        help='Dimentional of epsilon used in the perturbation')
     parser.add_argument('--mode', type=str, default='abs',
-                        help='The epsilon for L_infinity perturbation')
+                        help='Peturbation Mode')
     args = parser.parse_args()
 
     process_network(args.epsilon, args.mode)
