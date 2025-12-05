@@ -26,7 +26,7 @@ solver:
     refine_neuron_time_percentage: 0.8
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: before
+  pgd_order: after
   pgd_early_stop: true 
   cex_path: ./safety_benchmarks/counterexamples/PneumoniaMNIST/PneumoniaMNIST.txt
 bab:
