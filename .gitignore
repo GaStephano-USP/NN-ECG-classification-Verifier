@@ -6,5 +6,5 @@ SMT properties/*
 **/*.vnnlib
 example_images/*
 **/*.csv
-__pycache___
+__pycache__/
 *.pyc
