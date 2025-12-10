@@ -5,14 +5,15 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
 
-from model import ResNet18
+from model_antes import ResNet18
+# from model import ResNet18
 from medmnist import BreastMNIST
 from medmnist import INFO
 from model import EarlyStopping
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
-epochs = 100
+epochs = 60
 lr = 0.00001
 early_stopper = EarlyStopping(patience=10, mode="min")
 
@@ -42,7 +43,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
 
 # Initialize model
-model = ResNet18(kernel_size=1)
+model = ResNet18()
 
 # Class weight for BCEWithLogitsLoss: use positive class weight (for label 1)
 pos_weight = torch.tensor([40.0 / 6.0])  # pos_weight > 1 => penalize positive class more
@@ -136,7 +137,7 @@ ax[1].set_title(f"Accuracy Curve (batch_size={batch_size}, lr={lr})")
 ax[1].set_xlabel("Epochs")
 ax[1].set_ylabel("Accuracy")
 ax[1].legend(["Trainamento", "Validação"])
-fig.savefig("MedMNIST/BreastMNISTResNet18/grafico.png")
+fig.savefig("MedMNIST/SDCM/BreastMNISTResNet18/grafico.png")
 
 
 torch.save(model.state_dict(), "./BreastMNISTResNet.pth")  # Save the model state

@@ -9,12 +9,12 @@ import numpy as np
 import os
 import glob
 from PIL import Image
-from MedMNIST.SDCM.BreastMNISTmodel import ResNet18
+from BreastMNISTmodel import ResNet18
 
 default_epsilon = 0.030
 
 def process_network(epsilon, mode):
-    model_path = "./trained_models/BreastMNIST/BreastMNISTResNet.pth"
+    model_path = "./BreastMNISTResNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
     model = ResNet18().to(device)
@@ -104,5 +104,3 @@ def main():
  
 if __name__ == "__main__":
     main()
-
-    

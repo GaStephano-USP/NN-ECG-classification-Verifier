@@ -2,7 +2,7 @@ general:
   # device to run verifier
   enable_incomplete_verification: true
   save_adv_example: true
-  # device: cpu
+  device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
@@ -12,9 +12,9 @@ general:
   csv_name: all_instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model: 
   # name of the model (provided by library, see above)
-  name: BreastMNIST_ResNet
+  name: BreastMNIST
   # Load pretrained model from this specified path.
-  path: ./trained_models/BreastMNIST/BreastMNISTResNet.pth
+  path: ./BreastMNISTResNet.pth
   input_shape: [-1, 1, 28, 28]
 solver:
   beta-crown:
