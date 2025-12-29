@@ -5,25 +5,23 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
 
-from model_antes import ResNet18
-# from model import ResNet18
+#  from model_antes import ResNet18
+from model import ResNet18
 from medmnist import BreastMNIST
 from medmnist import INFO
 from model import EarlyStopping
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
-epochs = 60
+epochs = 80
 lr = 0.00001
 early_stopper = EarlyStopping(patience=10, mode="min")
 
 
-# Download PneumoniaMNIST
 data_flag = 'breastmnist'
 info = INFO[data_flag]
 DataClass = info['python_class']
 
-# Transform
 transform = transforms.Compose([
     transforms.ToTensor(),
 ])
@@ -69,7 +67,7 @@ for epoch in range(num_epochs):
     model.train()
     running_loss = 0.0
 
-    for inputs, labels in train_loader:  # define train_loader appropriately
+    for inputs, labels in train_loader:
         optimizer.zero_grad()
 
         outputs = model(inputs)
@@ -110,6 +108,7 @@ for epoch in range(num_epochs):
         train_vlosses.append((epoch, avg_vloss))
 
         acc_val = correct_v/total_v
+        print((epoch, acc_val))
         val_accuracy.append((epoch, acc_val)) 
 
     early_stopper(avg_vloss, model)

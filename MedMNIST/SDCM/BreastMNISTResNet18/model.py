@@ -119,7 +119,7 @@ class ResNet18(nn.Module):
 
         # 3. Classifier
         self.avgpool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
-        self.fc = nn.Linear(in_features=512 * BasicBlock.expansion, out_features=n_classes)
+        self.fc = nn.Linear(in_features=256 * BasicBlock.expansion, out_features=n_classes)
         
         # Initialize weights
         for m in self.modules():
@@ -137,7 +137,6 @@ class ResNet18(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        x = self.layer4(x)
         
         # Classifier
         x = self.avgpool(x)  # [bs, 512, 1, 1]

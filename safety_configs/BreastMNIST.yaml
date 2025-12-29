@@ -1,13 +1,13 @@
 general:
   # device to run verifier
-  enable_incomplete_verification: true
+  enable_incomplete_verification: false
   save_adv_example: true
   device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
-  complete_verifier: mip
+  complete_verifier: bab
   root_path: ./safety_benchmarks/benchmarks/BreastMNIST # Root path of the csv file.
   csv_name: all_instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
 model: 
@@ -31,5 +31,7 @@ attack:
   cex_path: ./safety_benchmarks/counterexamples/BreastMNIST/BreastMNIST.txt
 bab:
   branching:
-    candidates: 5
+    method: kfsb
+    candidates: 7
     reduceop: max
+  interm_transfer: False

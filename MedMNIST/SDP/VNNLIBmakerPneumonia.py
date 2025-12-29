@@ -25,7 +25,7 @@ class FullyConnected(nn.Module):
         x = self.fc2(x)
         return x
 
-def process_network(epsilon, mode):
+def process_network(epsilon, mode, k):
     model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
@@ -54,7 +54,15 @@ def process_network(epsilon, mode):
             #print(f"Deletado: {file_path}")
         except Exception as e:
             print(f"Erro ao deletar {file_path}: {e}")
+    
+    pixel = np.random.randint(0, 785, size = k)
+    values = np.random.choice ([0.0, 1.0], size = k)
+    pixel = pixel.tolist()
+    #print(f"pixels = {pixel} e valores = {values}")
+    a = 0    #pra iterar o values
+    
     for i in range(len(dataset)):
+        temp = len(dataset)
         image_tensor, label_tensor = dataset[i]
         image_tensor = image_tensor.unsqueeze(0).to(device)  # shape [1,1,28,28]
         label = int(label_tensor.item())
@@ -69,6 +77,7 @@ def process_network(epsilon, mode):
             flattened_input = image_tensor.view(-1).cpu().numpy()
             output_path_string = f"safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
             output_path = os.path.abspath(output_path_string)
+            a = 0
             iterator = iterator + 1
             try:
                 with open(output_path, "w") as f:
@@ -77,13 +86,23 @@ def process_network(epsilon, mode):
                         f.write(f"(declare-const X_{j} Real)\n")
                     f.write(f"(declare-const Y_0 Real)\n")
                     for val in flattened_input:
-                        if mode == 'rel':
+                        if mode == 'SnP':
+                            if n in pixel and a < len(values):
+                                val = values[a]
+                                print(f"pixel = {n} e valor ficou {val}") 
+                                a += 1       
+                            f.write(f"(assert (<= X_{n} {val}))\n")
+                            f.write(f"(assert (>= X_{n} {val}))\n")
+                    
+                        elif mode == 'rel':
                             f.write(f"(assert (<= X_{n} {val+(epsilon*val)}))\n")
                             f.write(f"(assert (>= X_{n} {val-(epsilon*val)}))\n")
                         elif mode == 'abs':
                             f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
                             f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
+                        
                         n = n + 1
+                        
                     if  label == 0:
                         f.write(f"(assert (>= Y_0 0))\n")
                     else:
@@ -112,11 +131,14 @@ def main():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--epsilon', type=float, default=None,
                         help='Dimensao da perturbacao a ser adicionada')
-    parser.add_argument('--mode', type=str, default='abs',
+    parser.add_argument('--mode', type=str, default='SnP',
                         help='The epsilon for L_infinity perturbation')
+    parser.add_argument('--k', type=int, default= 5,
+                        help='Quatidade de pixels perturbados')
+    
     args = parser.parse_args()
 
-    process_network(args.epsilon, args.mode)
+    process_network(args.epsilon, args.mode, args.k)
  
 if __name__ == "__main__":
     main()
