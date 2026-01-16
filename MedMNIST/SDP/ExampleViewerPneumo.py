@@ -15,7 +15,6 @@ for i in range(504):
             if '>=' in linha:
                if re.search(r"X", linha):
                  linha = linha.strip()
-                 print(linha)
                  valor = re.search(r"\d\.\d*", linha).group()
                  valores_pixels.append(float(valor.strip()))
     # Converte os valores para imagem

@@ -59,7 +59,7 @@ input_size = 784
 output_size = 4
 hidden_size = 50
 
-epochs = 1000
+epochs = 25
 batch_size = 50
 learning_rate = 0.01
 loss_func = nn.CrossEntropyLoss()

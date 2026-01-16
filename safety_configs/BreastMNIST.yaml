@@ -1,21 +1,27 @@
 general:
   # device to run verifier
-  enable_incomplete_verification: false
+  enable_incomplete_verification: true
   save_adv_example: true
   device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
   # "bab-refine": branch and bound with intermediate layer bounds computed by MIP.
-  complete_verifier: bab
+  complete_verifier: mip
   root_path: ./safety_benchmarks/benchmarks/BreastMNIST # Root path of the csv file.
-  csv_name: all_instances.csv # Name of the csv file (ONLY one column listed paths to vnnlibs).
+data:
+  dataset: BreastMNIST
+  mean: [0.4914, 0.4822, 0.4465] # Mean for input normalization
+  std: [0.2471, 0.2435, 0.2616] # Standard deviation for input normalization
+  start: 0 # First example index to verify
+  end: 100 # Last example index to verify
 model: 
   # name of the model (provided by library, see above)
   name: BreastMNIST
   # Load pretrained model from this specified path.
   path: ./BreastMNISTResNet.pth
   input_shape: [-1, 1, 28, 28]
+
 solver:
   beta-crown:
     iteration: 80
@@ -26,7 +32,7 @@ solver:
     refine_neuron_time_percentage: 0.8
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: after
+  pgd_order: before
   pgd_early_stop: true 
   cex_path: ./safety_benchmarks/counterexamples/BreastMNIST/BreastMNIST.txt
 bab:

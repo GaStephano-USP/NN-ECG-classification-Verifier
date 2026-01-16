@@ -9,7 +9,7 @@ import numpy as np
 import os
 import glob
 from PIL import Image
-from BreastMNISTmodel import ResNet18
+from BreastMNISTmodel import BreastMNISTCNN
 
 default_epsilon = 0.030
 
@@ -17,7 +17,7 @@ def process_network(epsilon, mode):
     model_path = "./BreastMNISTResNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
-    model = ResNet18().to(device)
+    model = BreastMNISTCNN().to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
 
