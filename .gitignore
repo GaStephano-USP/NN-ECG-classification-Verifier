@@ -9,3 +9,4 @@ example_images/*
 __pycache__/
 *.pyc
 *.pth
+trained_models/OCT_FC_Net/OCT_FC_Net.pth

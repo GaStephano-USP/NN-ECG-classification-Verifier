@@ -32,7 +32,7 @@ input_size = 784
 output_size = 1
 hidden_size = 50
 
-epochs = 20
+epochs = 50
 batch_size = 50
 
 def train(model, device, train_loader, optimizer, epoch, display=True):
