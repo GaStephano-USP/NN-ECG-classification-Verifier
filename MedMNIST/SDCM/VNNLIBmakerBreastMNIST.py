@@ -9,15 +9,15 @@ import numpy as np
 import os
 import glob
 from PIL import Image
-from BreastMNISTmodel import BreastMNISTCNN
+from BreastMNISTmodel import FullyConnected
 
-default_epsilon = 0.030
+default_epsilon = 0.10
 
 def process_network(epsilon, mode):
     model_path = "./BreastMNISTResNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
-    model = BreastMNISTCNN().to(device)
+    model = FullyConnected(784, 1, 100).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
 
@@ -75,7 +75,6 @@ def process_network(epsilon, mode):
                 # print(f"Serialized input saved to: {output_path}")
             except Exception as e:
                 print(f"Error writing file: {e}")
-    #print(iterator)
     for g in range(iterator):
         output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/BreastMNIST/instances_{g}.csv")
         try:

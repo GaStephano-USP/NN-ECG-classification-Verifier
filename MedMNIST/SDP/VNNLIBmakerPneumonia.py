@@ -26,12 +26,12 @@ class FullyConnected(nn.Module):
         return x
 
 def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels):
-    model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth"
+    model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet100.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
     input_size = 784
     output_size = 1
-    hidden_size = 50
+    hidden_size = 150
     model = FullyConnected(input_size, output_size, hidden_size).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
@@ -78,13 +78,14 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels):
     else:
         pixel = pixels
 
-    if (k == None and pixels != None): k = len(pixel)
-    x = int(k*p/100+0.5)
-    values = [1.0]*x + [0.0]*(k - x)
-    rng.shuffle(values)
-    #print(values)  
+    if (k == None and pixels != None): 
+        k = len(pixel)
+        x = int(k*p/100+0.5)
+        values = [1.0]*x + [0.0]*(k - x)
+        rng.shuffle(values)
+        #print(values)  
  
-    print(f"pixels = {pixel} e valores = {values}")
+        print(f"pixels = {pixel} e valores = {values}")
     a = 0    #pra iterar o values
     
     for i in range(len(dataset)):
@@ -173,7 +174,7 @@ def main():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--epsilon', type=float, default=None,
                         help='Dimensao da perturbacao a ser adicionada')
-    parser.add_argument('--mode', type=str, default='SnP',
+    parser.add_argument('--mode', type=str, default='rel',
                         help='Modo de operação')
     parser.add_argument('--k', type=int, default=None,
                         help='Quatidade de pixels perturbados')

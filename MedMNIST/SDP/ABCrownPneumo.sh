@@ -3,7 +3,7 @@ COUNT=0
 EPSILON=0.00
 LIMIT=50
 K=0
-MODE='SnP'
+MODE='rel_abs'
 OUTPUT_FILE="resultadospneumomnist.txt"
 > "$OUTPUT_FILE"
 if [ "$MODE" == 'rel_abs' ]; then

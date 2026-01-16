@@ -1,7 +1,7 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.00
-LIMIT=0.2
+LIMIT=0.3
 OUTPUT_FILE="resultadosbreastrel.txt"
 > "$OUTPUT_FILE"
 while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
