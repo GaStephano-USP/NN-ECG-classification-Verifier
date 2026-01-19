@@ -1,16 +1,16 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.000
-LIMIT=0.200
+LIMIT=0.2
 K=0
 MODE='rel_abs'
-OUTPUT_FILE="resultadosbreast.txt"
+OUTPUT_FILE="resultadospneumomnist100.txt"
 > "$OUTPUT_FILE"
 if [ "$MODE" == 'rel_abs' ]; then
 
     while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDP/VNNLIBmakerBreastMNIST.py --epsilon $EPSILON --mode "abs"
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/BreastMNIST.yaml)
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --epsilon $EPSILON --mode "rel"
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST150.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         EPSILON="$(bc <<< "$EPSILON + 0.001")"
@@ -20,8 +20,8 @@ if [ "$MODE" == 'rel_abs' ]; then
 elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDP/VNNLIBmakerBreastMNIST.py --k $K --mode "SnP" --l1 15 --l2 28 --c1 15 --c2 28
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/BreastMNIST.yaml)
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --l1 15 --l2 28 --c1 15 --c2 28
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST150.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         K="$(bc <<< "$K + 1")"

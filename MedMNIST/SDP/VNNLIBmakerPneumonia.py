@@ -6,6 +6,7 @@ from torchvision import transforms
 from medmnist import PneumoniaMNIST
 from medmnist import INFO
 import numpy as np
+import cv2
 import os
 import glob
 from PIL import Image
@@ -25,13 +26,13 @@ class FullyConnected(nn.Module):
         x = self.fc2(x)
         return x
 
-def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels):
+def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle):
     model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet100.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
     input_size = 784
     output_size = 1
-    hidden_size = 150
+    hidden_size = 100
     model = FullyConnected(input_size, output_size, hidden_size).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
@@ -101,11 +102,23 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels):
         if predicted == label:
             if epsilon == None:
                 epsilon = default_epsilon
+
+            if mode == "Rot":
+                img = image_tensor.squeeze(0).cpu().numpy()
+
+                print(img.min(), img.max())
+                print(img.dtype)
+
+                M = cv2.getRotationMatrix2D((14, 14), angle, 1.0)
+                image_tensor = cv2.warpAffine(img, M, (28, 28), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue = 0)
+                image_tensor = torch.from_numpy(image_tensor)
+
             flattened_input = image_tensor.view(-1).cpu().numpy()
             output_path_string = f"safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
             output_path = os.path.abspath(output_path_string)
             a = 0
             iterator = iterator + 1
+            
             try:
                 with open(output_path, "w") as f:
                     n = 0
@@ -130,8 +143,12 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels):
 
                         elif mode == 'Crop':
                             if n in delimit:    
-                                val = 1.0
+                                val = 0.0
                                 #print(f"pixel = {n} e valor ficou {val}")
+                            f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
+                            f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
+
+                        elif mode == 'Rot':
                             f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
                             f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
 
@@ -183,6 +200,9 @@ def main():
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed para escolher os pixels perturbados')
     parser.add_argument('--pixels', nargs='+', type=int, default=None) 
+
+    parser.add_argument('--angle', type=int, default=None,
+                        help='angulo da rotação em graus')
     
     parser.add_argument('--altura', type=int, default=None,
                         help='Altura da delimitação ou Crop')
@@ -193,7 +213,7 @@ def main():
     
     args = parser.parse_args()
 
-    process_network(args.epsilon, args.mode, args.k, args.p, args.altura, args.largura, args.P0, args.seed, args.pixels)
+    process_network(args.epsilon, args.mode, args.k, args.p, args.altura, args.largura, args.P0, args.seed, args.pixels, args.angle)
  
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 #!/bin/bash
 COUNT=0
-EPSILON=0.00
-LIMIT=50
+EPSILON=0.000
+LIMIT=0.200
 K=0
 MODE='rel_abs'
 OUTPUT_FILE="resultadospneumomnist.txt"
@@ -9,7 +9,7 @@ OUTPUT_FILE="resultadospneumomnist.txt"
 if [ "$MODE" == 'rel_abs' ]; then
 
     while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --epsilon $EPSILON --mode "rel"
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --epsilon $EPSILON --mode "abs"
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"

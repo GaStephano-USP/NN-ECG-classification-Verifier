@@ -57,7 +57,7 @@ class EarlyStopping:
 # hyperparameters
 input_size = 784
 output_size = 4
-hidden_size = 50
+hidden_size = 100
 
 epochs = 25
 batch_size = 50

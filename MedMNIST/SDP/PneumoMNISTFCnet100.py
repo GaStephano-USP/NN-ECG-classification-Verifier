@@ -30,7 +30,7 @@ class FullyConnected(nn.Module):  # inherits nn.Module
 # hyperparameters
 input_size = 784
 output_size = 1
-hidden_size = 150
+hidden_size = 100
 
 epochs = 50
 batch_size = 50

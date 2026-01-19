@@ -11,7 +11,7 @@ import glob
 from PIL import Image
 from BreastMNISTmodel import FullyConnected
 
-default_epsilon = 0.10
+default_epsilon = 0.00
 
 def process_network(epsilon, mode):
     model_path = "./BreastMNISTResNet.pth"
