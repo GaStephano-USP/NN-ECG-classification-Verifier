@@ -11,7 +11,7 @@ import os
 import glob
 from PIL import Image
 
-default_epsilon = 0.05
+default_epsilon = 0.00
 class FullyConnected(nn.Module):
 
     def __init__(self, input_size, num_classes, hidden_size):
@@ -44,6 +44,8 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
         transforms.ToTensor(),
     ])
 
+    #print(angle)
+
     dataset = DataClass(split='test', transform=transform, download=True)
     iterator = 0
     folder_path_delete = "./safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib"
@@ -58,7 +60,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     
     if (altura != None and largura != None and P0 != None):
         region = [P0[1]+1, P0[1]+altura, P0[0]+1, P0[0]+largura]
-        print (region)
+        #print (region)
     else: region = None
 
     rng = np.random.default_rng(seed)
@@ -68,7 +70,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             for i in range(region[0], region[1]+1):
                 for j in range(28*(i-1)+region[2], 28*(i-1)+region[3]+1):
                     delimit.append(j)
-            print (delimit)
+            #print (delimit)
             pixel = rng.choice(delimit, size = k, replace=False)
 
 
@@ -79,19 +81,21 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     else:
         pixel = pixels
 
-    if (k == None and pixels != None): 
+    if (k == None and pixel != None): 
         k = len(pixel)
-        x = int(k*p/100+0.5)
-        values = [1.0]*x + [0.0]*(k - x)
-        rng.shuffle(values)
-        #print(values)  
+    x = int(k*p/100+0.5)
+    values = [1.0]*x + [0.0]*(k - x)
+    rng.shuffle(values)
+    #print(values)  
  
-        print(f"pixels = {pixel} e valores = {values}")
+    print(f"pixels = {pixel} e valores = {values}")
     a = 0    #pra iterar o values
     
     for i in range(len(dataset)):
         temp = len(dataset)
         image_tensor, label_tensor = dataset[i]
+        #print(image_tensor.shape)
+
         image_tensor = image_tensor.unsqueeze(0).to(device)  # shape [1,1,28,28]
         label = int(label_tensor.item())
         with torch.no_grad():
@@ -105,15 +109,23 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
             if mode == "Rot":
                 img = image_tensor.squeeze(0).cpu().numpy()
+                img = img.squeeze(0)
 
-                print(img.min(), img.max())
-                print(img.dtype)
-
+                #print(f"array: {image_tensor}")
+                #print(img.dtype)
+                #print(angle)
                 M = cv2.getRotationMatrix2D((14, 14), angle, 1.0)
                 image_tensor = cv2.warpAffine(img, M, (28, 28), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue = 0)
-                image_tensor = torch.from_numpy(image_tensor)
+                #print(f"{i} rot: {image_tensor.shape}")
+                #print(image_tensor.shape)
 
+                image_tensor = torch.from_numpy(image_tensor)
+               
+                #print (f"tensor: {image_tensor}")
+
+            #print(image_tensor.shape)
             flattened_input = image_tensor.view(-1).cpu().numpy()
+            #print (len(flattened_input))
             output_path_string = f"safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
             output_path = os.path.abspath(output_path_string)
             a = 0
@@ -149,8 +161,8 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
                             f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
 
                         elif mode == 'Rot':
-                            f.write(f"(assert (<= X_{n} {val+epsilon}))\n")
-                            f.write(f"(assert (>= X_{n} {val-epsilon}))\n")
+                            f.write(f"(assert (<= X_{n} {val}))\n")
+                            f.write(f"(assert (>= X_{n} {val}))\n")
 
                         n = n + 1
                         
@@ -193,7 +205,7 @@ def main():
                         help='Dimensao da perturbacao a ser adicionada')
     parser.add_argument('--mode', type=str, default='rel',
                         help='Modo de operação')
-    parser.add_argument('--k', type=int, default=None,
+    parser.add_argument('--k', type=int, default=0,
                         help='Quatidade de pixels perturbados')
     parser.add_argument('--p', type=prop_0_100, default=50,
                         help='Proporção de pixels com valor 1')
@@ -201,7 +213,7 @@ def main():
                         help='Seed para escolher os pixels perturbados')
     parser.add_argument('--pixels', nargs='+', type=int, default=None) 
 
-    parser.add_argument('--angle', type=int, default=None,
+    parser.add_argument('--angle', type=float, default=None,
                         help='angulo da rotação em graus')
     
     parser.add_argument('--altura', type=int, default=None,
