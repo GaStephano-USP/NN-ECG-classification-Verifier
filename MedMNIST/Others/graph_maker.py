@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import argparse
 
-def draw_graph(mode, path, output_path, k, p):
+def draw_graph(mode, path, output_path, k, p, angle):
     
     if (mode == 'rel'):
         with open(path) as f:
@@ -35,6 +35,18 @@ def draw_graph(mode, path, output_path, k, p):
         ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
         ax.set_ylabel("Porcentagem de propriedades seguras")
 
+    if (mode == 'Rot'):
+        with open(path) as f:
+            rot = [float(line.strip()[:-1]) for line in f]
+
+        x = [i for i in range(int(angle))]
+        print (x)
+        print(len(rot))
+        fig, ax = plt.subplots(figsize=(10,5)) 
+        ax.plot(x, rot)
+        ax.set_title ("Robustez Rotacionando a Imagem")
+        ax.set_xlabel(f"Ângulo de rotação")
+        ax.set_ylabel("Porcentagem de propriedades seguras")
 
     fig.savefig(output_path)
 
@@ -51,10 +63,12 @@ def main():
                         help='Quatidade de pixels perturbados')
     parser.add_argument('--p', type=str, default=50,
                         help='Proporção de pixels com valor 1')
+    parser.add_argument('--angle', type=float, default=45,
+                        help='Angulo máximo da rotação')
                         
     args = parser.parse_args()
 
-    draw_graph(args.mode, args.file_path, args.output_file_path, args.k, args.p)
+    draw_graph(args.mode, args.file_path, args.output_file_path, args.k, args.p, args.angle)
  
 if __name__ == "__main__":
     main()

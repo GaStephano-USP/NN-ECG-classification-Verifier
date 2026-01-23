@@ -27,12 +27,12 @@ class FullyConnected(nn.Module):
         return x
 
 def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle):
-    model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet100.pth"
+    model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
     input_size = 784
     output_size = 1
-    hidden_size = 100
+    hidden_size = 50
     model = FullyConnected(input_size, output_size, hidden_size).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
@@ -94,7 +94,6 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     for i in range(len(dataset)):
         temp = len(dataset)
         image_tensor, label_tensor = dataset[i]
-        #print(image_tensor.shape)
 
         image_tensor = image_tensor.unsqueeze(0).to(device)  # shape [1,1,28,28]
         label = int(label_tensor.item())
@@ -111,19 +110,12 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
                 img = image_tensor.squeeze(0).cpu().numpy()
                 img = img.squeeze(0)
 
-                #print(f"array: {image_tensor}")
-                #print(img.dtype)
-                #print(angle)
                 M = cv2.getRotationMatrix2D((14, 14), angle, 1.0)
                 image_tensor = cv2.warpAffine(img, M, (28, 28), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue = 0)
-                #print(f"{i} rot: {image_tensor.shape}")
-                #print(image_tensor.shape)
 
                 image_tensor = torch.from_numpy(image_tensor)
                
-                #print (f"tensor: {image_tensor}")
 
-            #print(image_tensor.shape)
             flattened_input = image_tensor.view(-1).cpu().numpy()
             #print (len(flattened_input))
             output_path_string = f"safety_benchmarks/benchmarks/PneumoniaMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
