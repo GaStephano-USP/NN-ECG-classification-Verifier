@@ -85,12 +85,12 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
     if (k == None and pixel != None): 
         k = len(pixel)
-        x = int(k*p/100+0.5)
-        values = [1.0]*x + [0.0]*(k - x)
-        rng.shuffle(values)
-        print(values)  
+    x = int(k*p/100+0.5)
+    values = [1.0]*x + [0.0]*(k - x)
+    rng.shuffle(values)
+    print(values)  
  
-        print(f"pixels = {pixel} e valores = {values}")
+    print(f"pixels = {pixel} e valores = {values}")
     a = 0    #pra iterar o values
     
     for i in range(len(dataset)):
@@ -221,7 +221,7 @@ def main():
                         help='Modo de operação')
     parser.add_argument('--k', type=int, default=0,
                         help='Quatidade de pixels perturbados')
-    parser.add_argument('--p', type=prop_0_100, default=50,
+    parser.add_argument('--p', type=prop_0_100, default=100,
                         help='Proporção de pixels com valor 1')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed para escolher os pixels perturbados')

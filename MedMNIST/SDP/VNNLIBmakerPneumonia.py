@@ -75,7 +75,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
 
         else:
-            pixel = rng.integers(0, 785, size = k)
+            pixel = rng.choice(785, size=k, replace=False)
         pixel = pixel.tolist()
 
     else:

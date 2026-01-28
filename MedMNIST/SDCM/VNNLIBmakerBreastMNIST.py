@@ -65,12 +65,12 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
     if (k == None and pixel != None): 
         k = len(pixel)
-        x = int(k*p/100+0.5)
-        values = [1.0]*x + [0.0]*(k - x)
-        rng.shuffle(values)
-        print(values)  
+    x = int(k*p/100+0.5)
+    values = [1.0]*x + [0.0]*(k - x)
+    rng.shuffle(values)
+    print(values)  
  
-        print(f"pixels = {pixel} e valores = {values}")
+    print(f"pixels = {pixel} e valores = {values}")
     a = 0    #pra iterar o values
     
     for i in range(len(dataset)):
