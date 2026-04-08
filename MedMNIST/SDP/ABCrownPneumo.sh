@@ -1,30 +1,60 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.000
-LIMIT=0.200
+LIMIT=360
 K=0
-MODE='rel_abs'
-OUTPUT_FILE="resultadospneumomnist.txt"
+MODE="SnP"
+P0x=0
+P0y=0
+SEED=1950
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_SnP_AllS2.txt"
+ANGLE=0
 > "$OUTPUT_FILE"
+start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
 
     while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --epsilon $EPSILON --mode "abs"
+        echo $EPSILON
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --epsilon $EPSILON --mode "rel"
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         EPSILON="$(bc <<< "$EPSILON + 0.001")"
-        echo $EPSILON
     done
 
 elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --l1 15 --l2 28 --c1 15 --c2 28
+        echo $K
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 100
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         K="$(bc <<< "$K + 1")"
-        echo $K
     done
-fi 
+
+elif [ "$MODE" == "Rot" ]; then
+    while [ "$(bc <<< "$ANGLE < $LIMIT")" == "1" ]; do
+        echo $ANGLE
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --angle $ANGLE --mode "Rot"
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
+        match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+        echo "$match" >> "$OUTPUT_FILE"
+        ANGLE="$(bc <<< "$ANGLE + 0.5")"  
+    done
+elif [ "$MODE" == "Crop" ]; then
+    while [ "$(bc <<< "$P0y < 25")" == "1" ]; do
+        P0x=0
+        while [ "$(bc <<< "$P0x < 25")" == "1" ]; do
+            python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --mode "Crop" --P0 $P0x $P0y --altura 3 --largura 3
+            output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
+            match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+            echo "$match" >> "$OUTPUT_FILE"
+            P0x="$(bc <<< "$P0x + 0.5")"  
+        done
+        P0y="$(bc <<< "$P0y + 1")"
+    done
+fi
+end=`date +%s`
+runtime=$((end-start))
+echo "$runtime" >> "$OUTPUT_FILE"

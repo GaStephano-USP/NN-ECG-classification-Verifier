@@ -39,7 +39,7 @@ def draw_graph(mode, path, output_path, k, p, angle):
         with open(path) as f:
             rot = [float(line.strip()[:-1]) for line in f]
 
-        x = [i for i in range(int(angle))]
+        x = [0.5*i for i in range(2*int(angle))]
         print (x)
         print(len(rot))
         fig, ax = plt.subplots(figsize=(10,5)) 
@@ -47,7 +47,22 @@ def draw_graph(mode, path, output_path, k, p, angle):
         ax.set_title ("Robustez Rotacionando a Imagem")
         ax.set_xlabel(f"Ângulo de rotação")
         ax.set_ylabel("Porcentagem de propriedades seguras")
-
+    
+    if (mode == '3Rot'):
+        with open("results/outputs/BreastMNIST/resultadosbreastRot.txt") as f:
+            rot1 = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/PneumoniaMNIST/resultadospneumomnist_Rot_05.txt") as f:
+            rot2 = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/OCTMNIST/resultadosoctmnist_Rot.txt") as f:
+            rot3 = [float(line.strip()[:-1]) for line in f]
+        x = [0.5*i for i in range(2*int(angle))]
+        fig, ax = plt.subplots(figsize=(10,5)) 
+        ax.plot(x, rot1)
+        ax.plot(x, rot2)
+        ax.plot(x, rot3)
+        ax.set_title ("Robustez Rotacionando a Imagem")
+        ax.set_xlabel(f"Ângulo de rotação")
+        ax.set_ylabel("Porcentagem de propriedades seguras")
     fig.savefig(output_path)
 
 def main():
