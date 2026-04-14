@@ -26,14 +26,49 @@ class FullyConnected(nn.Module):
         x = self.fc2(x)
         return x
 
-def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle):
-    model_path = "./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth"
+class PneumoniaMNISTCNN(nn.Module):
+    def __init__(self, num_classes=1):
+        super().__init__()
+
+        # (1) Convolutional layer
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
+
+        # (2) MaxPooling layer
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)  # 28x28 -> 7x7
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)  # 14x14 -> 7x7
+
+        # (10) Output layer
+        self.out = nn.Linear(64 * 7 * 7, num_classes)
+
+    def forward(self, x):
+        # Conv + Pool
+        x = F.relu(self.conv1(x))
+        x = self.pool(x)
+
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = self.pool2(x)
+
+        # Flatten
+        x = torch.flatten(x, start_dim=1)
+
+        return self.out(x)
+
+def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle, model, model_path):
+    model_path = model_path
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # hyperparameters
     input_size = 784
     output_size = 1
     hidden_size = 50
-    model = FullyConnected(input_size, output_size, hidden_size).to(device)
+    if (model == "FC"):
+        model = FullyConnected(input_size, output_size, hidden_size).to(device)
+    elif (model == "CNN"):
+        model = PneumoniaMNISTCNN()
+    else:
+        print (f"Modelo {model} inválido")
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
 
@@ -193,6 +228,11 @@ def prop_0_100(proporcao):
 def main():
     parser = argparse.ArgumentParser(description='VNN spec generator',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--model', type=str, default="FC",
+                        help='Modelo da rede')
+    parser.add_argument('--model_path', type=str, default=None,
+                        help='Caminho do .pth da rede')
+
     parser.add_argument('--epsilon', type=float, default=None,
                         help='Dimensao da perturbacao a ser adicionada')
     parser.add_argument('--mode', type=str, default='rel',
@@ -217,7 +257,7 @@ def main():
     
     args = parser.parse_args()
 
-    process_network(args.epsilon, args.mode, args.k, args.p, args.altura, args.largura, args.P0, args.seed, args.pixels, args.angle)
+    process_network(args.epsilon, args.mode, args.k, args.p, args.altura, args.largura, args.P0, args.seed, args.pixels, args.angle, args.model, args.model_path)
  
 if __name__ == "__main__":
     main()
