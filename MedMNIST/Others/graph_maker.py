@@ -31,7 +31,7 @@ def draw_graph(mode, path, output_path, k, p, angle):
 
         fig, ax = plt.subplots(figsize=(10,5)) 
         ax.plot(x, snp)
-        ax.set_title ("Robustez aplicando 'Salt and Pepper' - 4°Quadrante")
+        ax.set_title ("Robustez aplicando 'Salt and Pepper'")
         ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
         ax.set_ylabel("Porcentagem de propriedades seguras")
 

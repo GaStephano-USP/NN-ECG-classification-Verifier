@@ -66,7 +66,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     if (model == "FC"):
         model = FullyConnected(input_size, output_size, hidden_size).to(device)
     elif (model == "CNN"):
-        model = PneumoniaMNISTCNN()
+        model = PneumoniaMNISTCNN().to(device)
     else:
         print (f"Modelo {model} inválido")
     model.load_state_dict(torch.load(model_path, map_location=device))
@@ -106,11 +106,13 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
                 for j in range(28*(i-1)+region[2], 28*(i-1)+region[3]+1):
                     delimit.append(j)
             #print (delimit)
-            pixel = rng.choice(delimit, size = k, replace=False)
+            pixel = rng.permutation(delimit)
+            pixel = pixel [:k]
 
 
         else:
-            pixel = rng.integers(0, 785, size = k)
+            pixel = rng.permutation(784)
+            pixel = pixel [:k]
         pixel = pixel.tolist()
 
     else:
@@ -118,9 +120,11 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
     if (k == None and pixel != None): 
         k = len(pixel)
-    x = int(k*p/100+0.5)
-    values = [1.0]*x + [0.0]*(k - x)
-    rng.shuffle(values)
+    x = int(784*p/100+0.5)
+    values = [1.0]*x + [0.0]*(784 - x)
+    values = rng.permutation(values)
+    values = values [:k]
+    values = values.tolist()
     #print(values)  
  
     print(f"pixels = {pixel} e valores = {values}")
