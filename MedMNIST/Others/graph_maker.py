@@ -24,6 +24,7 @@ def draw_graph(mode, path, output_path, k, p, angle):
         ax.set_ylabel("Porcentagem de propriedades seguras")
 
     if (mode == 'SnP'):
+        print(path)
         with open(path) as f:
             snp = [float(line.strip()[:-1]) for line in f]
 
@@ -39,7 +40,8 @@ def draw_graph(mode, path, output_path, k, p, angle):
         with open(path) as f:
             rot = [float(line.strip()[:-1]) for line in f]
 
-        x = [0.5*i for i in range(2*int(angle))]
+        #x = [0.5*i for i in range(2*int(angle))]
+        x = [i for i in range (len(rot))] 
         print (x)
         print(len(rot))
         fig, ax = plt.subplots(figsize=(10,5)) 

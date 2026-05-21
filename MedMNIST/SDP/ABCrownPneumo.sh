@@ -2,12 +2,12 @@
 COUNT=0
 EPSILON=0.000
 LIMIT=784
-K=350
+K=0
 MODE="SnP"
 P0x=0
 P0y=0
 SEED=1950
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_503.txt"
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_testeeeee_max.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
@@ -26,7 +26,7 @@ elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
         echo $K
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 50 --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 100 --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
@@ -36,11 +36,11 @@ elif [ "$MODE" == "SnP" ]; then
 elif [ "$MODE" == "Rot" ]; then
     while [ "$(bc <<< "$ANGLE < $LIMIT")" == "1" ]; do
         echo $ANGLE
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --angle $ANGLE --mode "Rot"
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --angle $ANGLE --mode "Rot" --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        ANGLE="$(bc <<< "$ANGLE + 0.5")"  
+        ANGLE="$(bc <<< "$ANGLE + 4")"  
     done
 elif [ "$MODE" == "Crop" ]; then
     while [ "$(bc <<< "$P0y < 25")" == "1" ]; do

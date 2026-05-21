@@ -26,6 +26,36 @@ class FullyConnected(nn.Module):
         x = self.fc2(x)
         return x
 
+class PneumoniaMNISTCNN_avg(nn.Module):
+    def __init__(self, num_classes=1):
+        super().__init__()
+
+        # (1) Convolutional layer
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
+
+        # (2) MaxPooling layer
+        self.pool = nn.AvgPool2d(kernel_size=2, stride=2)  # 28x28 -> 7x7
+        self.pool2 = nn.AvgPool2d(kernel_size=2, stride=2)  # 14x14 -> 7x7
+
+        # (10) Output layer
+        self.out = nn.Linear(64 * 7 * 7, num_classes)
+
+    def forward(self, x):
+        # Conv + Pool
+        x = F.relu(self.conv1(x))
+        x = self.pool(x)
+
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = self.pool2(x)
+
+        # Flatten
+        x = torch.flatten(x, start_dim=1)
+
+        return self.out(x)
+
 class PneumoniaMNISTCNN(nn.Module):
     def __init__(self, num_classes=1):
         super().__init__()
@@ -65,8 +95,11 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     hidden_size = 50
     if (model == "FC"):
         model = FullyConnected(input_size, output_size, hidden_size).to(device)
-    elif (model == "CNN"):
+    elif (model == "CNN_max"):
         model = PneumoniaMNISTCNN().to(device)
+    elif (model == "CNN_avg"):
+        model = PneumoniaMNISTCNN_avg().to(device)
+    
     else:
         print (f"Modelo {model} inválido")
     model.load_state_dict(torch.load(model_path, map_location=device))
@@ -142,6 +175,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             predicted = int(prob > 0.5)
             #print('predicted:', predicted, 'prob:', prob.item(), 'label:', label, 'sample:', str(i))
         if predicted == label:
+            print(f"propriedade: {iterator}; label: {label}; prod: {prob}")
             if epsilon == None:
                 epsilon = default_epsilon
 
