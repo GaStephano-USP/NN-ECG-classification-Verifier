@@ -8,7 +8,7 @@ P0x=0
 P0y=0
 MODE='SnP'
 ANGLE=0
-OUTPUT_FILE="results/outputs/OCTMNIST/resultadosoctmnist_SnP_allS.txt"
+OUTPUT_FILE="results/outputs/OCTMNIST/CNN/resultadosoctmnist_SnP_0.txt"
 > "$OUTPUT_FILE"
 start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
@@ -23,8 +23,8 @@ if [ "$MODE" == 'rel_abs' ]; then
 elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --k $K --mode "SnP" --seed $SEED 
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST.yaml)
+        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --k $K --mode "SnP" --seed $SEED --p 0 --model CNN --model_path trained_models/OCT_ConvNet/OCTMNISTCNN3_Max.pth
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST_CNN.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         K="$(bc <<< "$K + 1")"
