@@ -140,6 +140,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             output = model(image_tensor)
             predicted = torch.argmax(output, dim=1).item()
         if predicted == label:
+            print (label)
             if epsilon == None:
                 epsilon = default_epsilon
 

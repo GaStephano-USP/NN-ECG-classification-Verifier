@@ -101,13 +101,13 @@ def draw_graph(mode, path, output_path, k, p, angle):
             rot3 = [float(line.strip()[:-1]) for line in f]
         x = [0.5*i for i in range(2*int(angle))]
         fig, ax = plt.subplots(figsize=(10,5)) 
-        ax.plot(x, rot1, label="BreastMNIST", ls="-", lw="2", fontsize="14")
-        ax.plot(x, rot2, label="PneumoniaMNIST", ls="--", lw="2", fontsize="14")
-        ax.plot(x, rot3, label="OCTMNIST", ls="--", lw="2",  fontsize="14")
+        ax.plot(x, rot1, label="BreastMNIST", ls=":", lw="2")
+        ax.plot(x, rot2, label="PneumoniaMNIST", ls="--", lw="2")
+        ax.plot(x, rot3, label="OCTMNIST", ls="-", lw="2")
         ax.set_title ("Robustez Rotacionando a Imagem")
         ax.set_xlabel(f"Ângulo de rotação")
         ax.set_ylabel("Porcentagem de propriedades seguras")
-        ax.legend(fontsize="14")
+        ax.legend(fontsize="12")
     print(output_path)
     fig.savefig(output_path)
 
