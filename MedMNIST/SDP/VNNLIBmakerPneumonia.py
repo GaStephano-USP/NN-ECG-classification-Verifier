@@ -95,7 +95,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     hidden_size = 50
     if (model == "FC"):
         model = FullyConnected(input_size, output_size, hidden_size).to(device)
-    elif (model == "CNN_max"):
+    elif (model == "CNN"):
         model = PneumoniaMNISTCNN().to(device)
     elif (model == "CNN_avg"):
         model = PneumoniaMNISTCNN_avg().to(device)

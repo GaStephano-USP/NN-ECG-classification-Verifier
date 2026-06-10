@@ -81,8 +81,8 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
 
     dataset = DataClass(split='test', transform=transform, download=True)
     iterator = 0
-    folder_path_delete = "./safety_benchmarks/benchmarks/OCTMNIST/vnnlib/OCTMNIST"
-    compiled_files = glob.glob(os.path.join(folder_path_delete, "*.vnnlib.compiled"))
+    folder_path_delete = "./safety_benchmarks/benchmarks/OCTMNIST/vnnlib/"
+    compiled_files = glob.glob(os.path.join(folder_path_delete, "*"))
     #print('tamanho', len(dataset))
     for file_path in compiled_files:
         try:
@@ -140,7 +140,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             output = model(image_tensor)
             predicted = torch.argmax(output, dim=1).item()
         if predicted == label:
-            print (label)
+            #print (label)
             if epsilon == None:
                 epsilon = default_epsilon
 
@@ -213,6 +213,8 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
                     for m in range(4):
                         if m != label:
                             f.write(f"(assert (<= Y_{label} Y_{m}))\n")
+
+                    print(iterator, label)
                 # print(f"Serialized input saved to: {output_path}")
             except Exception as e:
                 print(f"Error writing file: {e}")

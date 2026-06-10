@@ -2,12 +2,12 @@
 COUNT=0
 EPSILON=0.000
 LIMIT=784
-K=0
-MODE="SnP"
+K=708
+MODE="Crop"
 P0x=0
 P0y=0
-SEED=1950
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_testeeeee_max.txt"
+SEED=60601
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_Crop.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
@@ -26,7 +26,7 @@ elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
         echo $K
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 100 --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 0 --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
@@ -46,8 +46,8 @@ elif [ "$MODE" == "Crop" ]; then
     while [ "$(bc <<< "$P0y < 25")" == "1" ]; do
         P0x=0
         while [ "$(bc <<< "$P0x < 25")" == "1" ]; do
-            python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --mode "Crop" --P0 $P0x $P0y --altura 3 --largura 3
-            output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST)
+            python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --mode "Crop" --P0 $P0x $P0y --altura 3 --largura 3 --model CNN --model_path trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_Max.pth
+            output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml )
             match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
             echo "$match" >> "$OUTPUT_FILE"
             P0x="$(bc <<< "$P0x + 0.5")"  

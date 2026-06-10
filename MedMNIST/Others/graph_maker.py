@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import argparse
+import numpy as np
+from scipy.ndimage import uniform_filter1d
 
-def draw_graph(mode, path, output_path, k, p, angle):
+def draw_graph(mode, path, output_path, k, p, angle, mm):
     
     if (mode == 'rel'):
         with open(path) as f:
@@ -69,14 +71,21 @@ def draw_graph(mode, path, output_path, k, p, angle):
         print(path)
         with open(path) as f:
             snp = [float(line.strip()[:-1]) for line in f]
-
-        x = [i for i in range(k)]
-
         fig, ax = plt.subplots(figsize=(10,5)) 
-        ax.plot(x, snp)
+        if mm != None:
+            snp_arr = np.array(snp)
+            snp_smooth = uniform_filter1d(snp_arr, size=mm, mode='nearest')
+            print(snp_smooth)
+            x = [i for i in range(len(snp_smooth))]
+            ax.plot(x, snp_smooth)
+            ax.set_ylabel(f"Porcentagem de propriedades seguras com média móvel {mm}")
+        else:
+            x = [i for i in range(k)]
+            ax.plot(x, snp)
+            ax.set_ylabel("Porcentagem de propriedades seguras")   
         ax.set_title ("Robustez aplicando 'Salt and Pepper'")
         ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
-        ax.set_ylabel("Porcentagem de propriedades seguras")
+        
 
     if (mode == 'Rot'):
         with open(path) as f:
@@ -126,10 +135,12 @@ def main():
                         help='Proporção de pixels com valor 1')
     parser.add_argument('--angle', type=float, default=45,
                         help='Angulo máximo da rotação')
+    parser.add_argument('--mm', type=int, default=None,
+                        help='Média Móvel')
                         
     args = parser.parse_args()
 
-    draw_graph(args.mode, args.file_path, args.output_file_path, args.k, args.p, args.angle)
+    draw_graph(args.mode, args.file_path, args.output_file_path, args.k, args.p, args.angle, args.mm)
  
 if __name__ == "__main__":
     main()
