@@ -50,7 +50,7 @@ elif [ "$MODE" == "Crop" ]; then
             output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml )
             match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
             echo "$match" >> "$OUTPUT_FILE"
-            P0x="$(bc <<< "$P0x + 0.5")"  
+            P0x="$(bc <<< "$P0x + 1")"  
         done
         P0y="$(bc <<< "$P0y + 1")"
     done
