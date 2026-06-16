@@ -82,7 +82,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     dataset = DataClass(split='test', transform=transform, download=True)
     iterator = 0
     folder_path_delete = "./safety_benchmarks/benchmarks/OCTMNIST/vnnlib/"
-    compiled_files = glob.glob(os.path.join(folder_path_delete, "*"))
+    compiled_files = glob.glob(os.path.join(folder_path_delete, "*.vnnlib.compiled"))
     #print('tamanho', len(dataset))
     for file_path in compiled_files:
         try:
@@ -129,8 +129,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     for i in range(len(dataset)):
         temp = len(dataset)
         image_tensor, label_tensor = dataset[i]
-        #print(image_tensor.shape)
-
+        #print(temp)
         image_tensor = image_tensor.unsqueeze(0).to(device)  # shape [1,1,28,28]
         label = int(label_tensor.item())
         image_tensor, label_tensor = dataset[i]
@@ -172,8 +171,8 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             output_path_string = f"safety_benchmarks/benchmarks/OCTMNIST/vnnlib/Property_" + str(iterator) + ".vnnlib"
             output_path = os.path.abspath(output_path_string)
             a = 0
+            print (iterator, label)
             iterator = iterator + 1
-            
             try:
                 with open(output_path, "w") as f:
                     n = 0
@@ -209,16 +208,16 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
                             f.write(f"(assert (>= X_{n} {val}))\n")
 
                         n = n + 1
-                        
+                    f.write("(assert (or\n")
                     for m in range(4):
                         if m != label:
-                            f.write(f"(assert (<= Y_{label} Y_{m}))\n")
+                            f.write(f"(and (<= Y_{label} Y_{m}))\n")
+                    f.write("))")
 
-                    print(iterator, label)
+                    #print(iterator, label)
                 # print(f"Serialized input saved to: {output_path}")
             except Exception as e:
                 print(f"Error writing file: {e}")
-    #print(iterator)
     for g in range(iterator):
         output_path_instances = os.path.abspath(f"safety_benchmarks/benchmarks/OCTMNIST/instances_{g}.csv")
         try:

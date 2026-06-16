@@ -7,7 +7,7 @@ MODE="Crop"
 P0x=0
 P0y=0
 SEED=60601
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_Crop.txt"
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_Crop2.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`

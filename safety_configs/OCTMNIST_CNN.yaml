@@ -1,6 +1,6 @@
 general:
   # results_file: exp_1_out.txt
-  save_adv_example: false
+  save_adv_example: true
   enable_incomplete_verification: true
 
   # device to run verifier
@@ -33,7 +33,7 @@ attack:
   # Early stop PGD when an adversarial example is found.
   pgd_order: before # skip, before or after
   pgd_early_stop: true
-  # cex_path: ./safety_benchmarks/counterexamples/OCTMNIST_FC/OCTMNIST.txt
+  cex_path: ./safety_benchmarks/counterexamples/OCTMNIST_FC/OCTMNIST_CNN.txt
 bab:
   branching:
     candidates: 5
