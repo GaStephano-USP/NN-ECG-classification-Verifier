@@ -26,17 +26,17 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
         ax.set_ylabel("Porcentagem de propriedades seguras")
 
     if (mode == 'abs_rel_pneumo_oct'):
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/PneumoniaMNIST/resultadospneumomnist_abs.txt") as f:
+        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Abs.txt") as f:
             abs1 = [float(line.strip()[:-1]) for line in f]
         with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/resultadosoctmnist_abs.txt") as f:
             abs2 = [float(line.strip()[:-1]) for line in f]
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/PneumoniaMNIST/resultadospneumomnist_rel.txt") as f:
+        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Rel.txt") as f:
             rel1 = [float(line.strip()[:-1]) for line in f]
         with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/resultadosoctmnist_rel.txt") as f:
             rel2 = [float(line.strip()[:-1]) for line in f]
-        abs1.extend([0.0] * (len(rel1) - len(abs1)))
-        abs2.extend([0.0] * (len(rel1) - len(abs2)))
-        rel2.extend([0.0] * (len(rel1) - len(rel2)))
+        abs1.extend([0.0] * (len(rel2) - len(abs1)))
+        abs2.extend([0.0] * (len(rel2) - len(abs2)))
+        rel1.extend([0.0] * (len(rel2) - len(rel1)))
         epsilon = [ i / 1000 for i in range(len(rel1))]
         fig, ax = plt.subplots(figsize=(10,5))
         plt.rcParams['font.family'] = 'serif'
