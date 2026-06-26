@@ -1,14 +1,14 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.14
-LIMIT=784
+LIMIT=360
 K=0
 SEED=1974
 MODE='Crop'
 P0x=0
 P0y=0
 ANGLE=0
-OUTPUT_FILE="results/outputs/BreastMNIST/CNN/resultadosbreast_Crop.txt"
+OUTPUT_FILE="results/outputs/BreastMNIST/CNN/resultadosbreast_Rot.txt"
 > "$OUTPUT_FILE"
 start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
@@ -36,11 +36,11 @@ elif [ "$MODE" == "SnP" ]; then
 elif [ "$MODE" == "Rot" ]; then
 
     while [ "$(bc <<< "$ANGLE < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDCM/VNNLIBmakerBreastMNIST.py --angle $ANGLE --mode "Rot" 
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/BreastMNIST.yaml)
+        python3 ./MedMNIST/SDCM/VNNLIBmakerBreastMNIST.py --angle $ANGLE --mode "Rot" --model CNN  --model_path ./trained_models/BreastMNIST/CNN/BreastMNISTCNN3_Max.pth
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_BreastMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        ANGLE="$(bc <<< "$ANGLE + 0.5")"
+        ANGLE="$(bc <<< "$ANGLE + 4")"
         echo $ANGLE  
     done
 

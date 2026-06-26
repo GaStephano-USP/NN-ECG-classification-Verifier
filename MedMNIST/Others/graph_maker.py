@@ -27,24 +27,24 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
 
     if (mode == 'abs_rel_pneumo_oct'):
         with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Abs.txt") as f:
-            abs1 = [float(line.strip()[:-1]) for line in f]
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/resultadosoctmnist_abs.txt") as f:
-            abs2 = [float(line.strip()[:-1]) for line in f]
+            abs_oct = [float(line.strip()[:-1]) for line in f]
+        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/PneumoniaMNIST/resultadospneumomnist_abs.txt") as f:
+            abs_pneumo = [float(line.strip()[:-1]) for line in f]
         with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Rel.txt") as f:
-            rel1 = [float(line.strip()[:-1]) for line in f]
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/OCTMNIST/resultadosoctmnist_rel.txt") as f:
-            rel2 = [float(line.strip()[:-1]) for line in f]
-        abs1.extend([0.0] * (len(rel2) - len(abs1)))
-        abs2.extend([0.0] * (len(rel2) - len(abs2)))
-        rel1.extend([0.0] * (len(rel2) - len(rel1)))
-        epsilon = [ i / 1000 for i in range(len(rel1))]
+            rel_oct = [float(line.strip()[:-1]) for line in f]
+        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/PneumoniaMNIST/resultadospneumomnist_rel.txt") as f:
+            rel_pneumo = [float(line.strip()[:-1]) for line in f]
+        abs_oct.extend([0.0] * (len(rel_pneumo) - len(abs_oct)))
+        abs_pneumo.extend([0.0] * (len(rel_pneumo) - len(abs_pneumo)))
+        rel_oct.extend([0.0] * (len(rel_pneumo) - len(rel_oct)))
+        epsilon = [ i / 1000 for i in range(len(rel_pneumo))]
         fig, ax = plt.subplots(figsize=(10,5))
         plt.rcParams['font.family'] = 'serif'
         plt.rcParams['font.serif'] = ['Liberation Serif']
-        ax.plot(epsilon, abs1, label="Robustez Absoluta - PneumoniaMNIST", ls="-", lw="2")
-        ax.plot(epsilon, abs2, label="Robustez Absoluta - OCTMNIST", ls=":", lw="3")
-        ax.plot(epsilon, rel1, label="Robustez Relativa - PneumoniaMNIST", ls="--", lw="2")
-        ax.plot(epsilon, rel2, label="Robustez Relativa - OCTMNIST", ls="-.", lw="2")
+        ax.plot(epsilon, abs_pneumo, label="Robustez Absoluta - PneumoniaMNIST", ls="-", lw="2")
+        ax.plot(epsilon, abs_oct, label="Robustez Absoluta - OCTMNIST", ls=":", lw="3")
+        ax.plot(epsilon, rel_pneumo, label="Robustez Relativa - PneumoniaMNIST", ls="--", lw="2")
+        ax.plot(epsilon, rel_oct, label="Robustez Relativa - OCTMNIST", ls="-.", lw="2")
         ax.set_title ("Robustez em Relação a Perturbações Locais", fontsize="16")
         ax.set_xlabel("Epsilon", fontsize="14")
         ax.set_ylabel("Porcentagem de Propriedades Seguras", fontsize="14")
@@ -65,7 +65,7 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
         ax.set_title ("Robustez em Relação a Perturbações Locais - BreastMNIST", fontsize="16")
         ax.set_xlabel("Epsilon", fontsize="14")
         ax.set_ylabel("Porcentagem de Propriedades Seguras", fontsize="14")
-        ax.legend(fontsize="12")
+        ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
 
     if (mode == 'SnP'):
         print(path)
@@ -106,17 +106,18 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             rot1 = [float(line.strip()[:-1]) for line in f]
         with open("results/outputs/PneumoniaMNIST/resultadospneumomnist_Rot_05.txt") as f:
             rot2 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/OCTMNIST/resultadosoctmnist_Rot.txt") as f:
+        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Rot.txt") as f:
             rot3 = [float(line.strip()[:-1]) for line in f]
-        x = [0.5*i for i in range(2*int(angle))]
+        x1 = [0.5*i for i in range(2*int(angle))]
+        x2 = [4*i for i in range (int(angle/4))]
         fig, ax = plt.subplots(figsize=(10,5)) 
-        ax.plot(x, rot1, label="BreastMNIST", ls=":", lw="2")
-        ax.plot(x, rot2, label="PneumoniaMNIST", ls="--", lw="2")
-        ax.plot(x, rot3, label="OCTMNIST", ls="-", lw="2")
+        ax.plot(x1, rot1, label="BreastMNIST", ls=":", lw="2")
+        ax.plot(x1, rot2, label="PneumoniaMNIST", ls="--", lw="2")
+        ax.plot(x2, rot3, label="OCTMNIST", ls="-", lw="2")
         ax.set_title ("Robustez Rotacionando a Imagem")
         ax.set_xlabel(f"Ângulo de rotação")
         ax.set_ylabel("Porcentagem de propriedades seguras")
-        ax.legend(fontsize="12")
+        ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0.5, 0.5, 0.))
     print(output_path)
     fig.savefig(output_path)
 

@@ -88,7 +88,7 @@ class PneumoniaMNISTCNN(nn.Module):
 
 def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle, model, model_path):
     model_path = model_path
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     # hyperparameters
     input_size = 784
     output_size = 1

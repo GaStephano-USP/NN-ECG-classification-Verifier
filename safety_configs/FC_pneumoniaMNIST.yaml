@@ -1,8 +1,8 @@
 general:
   # device to run verifier
   enable_incomplete_verification: true
-  save_adv_example: true
-  # device: cpu
+  # save_adv_example: true
+  device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
@@ -16,6 +16,7 @@ model:
   # Load pretrained model from this specified path.
   path: ./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth
   input_shape: [-1, 1, 28, 28]
+
 solver:
   beta-crown:
     iteration: 80
@@ -26,10 +27,12 @@ solver:
     refine_neuron_time_percentage: 0.8
 attack:
   # Early stop PGD when an adversarial example is found.
-  pgd_order: after
+  pgd_order: before
   pgd_early_stop: true 
-  cex_path: ./safety_benchmarks/counterexamples/PneumoniaMNIST/PneumoniaMNIST.txt
+  #cex_path: ./safety_benchmarks/counterexamples/PneumoniaMNIST/PneumoniaMNIST.txt
 bab:
   branching:
-    candidates: 5
+    method: kfsb
+    candidates: 7
     reduceop: max
+  interm_transfer: False

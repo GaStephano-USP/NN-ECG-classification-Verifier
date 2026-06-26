@@ -1,14 +1,14 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.00
-LIMIT=2
+LIMIT=784
 K=0
 SEED=60601
 P0x=0
 P0y=0
-MODE='rel_abs'
+MODE='SnP'
 ANGLE=0
-OUTPUT_FILE="results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Rel.txt"
+OUTPUT_FILE="results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_SnP50.txt"
 > "$OUTPUT_FILE"
 start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
@@ -23,7 +23,7 @@ if [ "$MODE" == 'rel_abs' ]; then
 elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --k $K --mode "SnP" --seed $SEED --p 100 --model FC --model_path ./trained_models/OCT_FC_Net/OCT_FC_Net.pth # trained_models/OCT_ConvNet/OCTMNISTCNN3_Max.pth
+        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --k $K --mode "SnP" --seed $SEED --p 50 --model FC --model_path ./trained_models/OCT_FC_Net/OCT_FC_Net.pth # trained_models/OCT_ConvNet/OCTMNISTCNN3_Max.pth
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
@@ -34,8 +34,8 @@ elif [ "$MODE" == "SnP" ]; then
 elif [ "$MODE" == "Rot" ]; then
 
     while [ "$(bc <<< "$ANGLE < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --angle $ANGLE --mode "Rot" --model FC --model_path ./trained_models/OCT_FC_Net/OCT_FC_Net.pth
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST.yaml)
+        python3 ./MedMNIST/SDPR/VNNLIBmakerOCT.py --angle $ANGLE --mode "Rot" --model CNN --model_path ./trained_models/OCT_ConvNet/OCTMNISTCNN3_Max.pth
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST_CNN.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         ANGLE="$(bc <<< "$ANGLE + 4")"
@@ -53,7 +53,7 @@ elif [ "$MODE" == "Crop" ]; then
             P0x="$(bc <<< "$P0x + 1")"  
         done
         P0y="$(bc <<< "$P0y + 1")"
-    done
+    done    
 fi
 end=`date +%s`
 runtime=$((end-start))
