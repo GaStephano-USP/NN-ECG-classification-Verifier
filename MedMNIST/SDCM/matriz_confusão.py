@@ -63,7 +63,7 @@ def main():
     parser.add_argument('--output_path', type=str, default='matriz_confusao_breast.png', help='Caminho para salvar a imagem da matriz')
     args = parser.parse_args()    
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cpu')
 
     # Instancia o modelo conforme os hiperparâmetros padrões do pipeline binário (Input: 784, Output: 1, Hidden: 50)
     model = FullyConnected(input_size=784, num_classes=1, hidden_size=50).to(device)

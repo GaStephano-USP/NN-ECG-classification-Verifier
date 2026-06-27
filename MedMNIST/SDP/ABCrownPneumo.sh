@@ -6,8 +6,8 @@ K=0
 MODE="SnP"
 P0x=0
 P0y=0
-SEED=144192
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_Snp_seed2.txt"
+SEED=60601
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_SnP_AllP_seed1.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
