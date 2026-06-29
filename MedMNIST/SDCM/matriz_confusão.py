@@ -66,7 +66,7 @@ def main():
     device = torch.device('cpu')
 
     # Instancia o modelo conforme os hiperparâmetros padrões do pipeline binário (Input: 784, Output: 1, Hidden: 50)
-    model = FullyConnected(input_size=784, num_classes=1, hidden_size=50).to(device)
+    model = FullyConnected(input_size=784, num_classes=1, hidden_size=100).to(device)
     
     model.load_state_dict(torch.load(args.model_path, map_location=device))
     model.eval()

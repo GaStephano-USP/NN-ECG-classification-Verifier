@@ -61,7 +61,7 @@ output_size = 4
 hidden_size = 50
 def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angle, model, model_path):
     model_path = model_path
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     
     if (model == "FC"):
         model = OCTMNISTFC(input_size, output_size, hidden_size).to(device)

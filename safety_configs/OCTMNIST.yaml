@@ -4,7 +4,7 @@ general:
   enable_incomplete_verification: true
 
   # device to run verifier
-  # device: cuda
+  device: cpu
   # Complete verification verifier. 
   # "bab": branch and bound with beta-CROWN; 
   # "mip": mixed integer programming (MIP) formulation; 
