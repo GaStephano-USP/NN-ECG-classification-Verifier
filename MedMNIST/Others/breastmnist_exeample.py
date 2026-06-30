@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
 from torchvision import transforms
-from medmnist import PneumoniaMNIST, OCTMNIST, BreastMNIST
+from medmnist import BreastMNIST
 
 # =========================
 # Transformação
@@ -11,82 +11,55 @@ transform = transforms.Compose([
 ])
 
 # =========================
-# Carregamento dos datasets
+# Carregamento do dataset
 # =========================
-pneumonia = PneumoniaMNIST(split='train', download=True, transform=transform)
 breast = BreastMNIST(split='train', download=True, transform=transform)
-octmnist = OCTMNIST(split='train', download=True, transform=transform)
 
 # =========================
-# Função para pegar uma imagem de cada classe
+# Função para pegar N exemplos de cada classe
 # =========================
-def get_one_example_per_class(dataset, class_labels):
+def get_multiple_examples_per_class(dataset, class_labels, num_per_class=4):
     images = []
     labels = []
-
-    found = set()
+    
+    # Dicionário para contar quantas imagens já pegamos de cada classe
+    counts = {label_idx: 0 for label_idx in class_labels.keys()}
+    total_needed = len(class_labels) * num_per_class
 
     for img, label in dataset:
-        label = int(label)
+        label = int(label.item() if hasattr(label, 'item') else label)
 
-        if label not in found:
+        if counts[label] < num_per_class:
             images.append(img)
             labels.append(class_labels[label])
-            found.add(label)
+            counts[label] += 1
 
-        if len(found) == len(class_labels):
+        if len(images) == total_needed:
             break
 
     return images, labels
 
 # =========================
-# Labels dos datasets
+# Labels do BreastMNIST
 # =========================
-
-# PneumoniaMNIST
-pneumonia_labels = {
-    0: "Normal",
-    1: "Pneumonia"
-}
-
-# BreastMNIST
 breast_labels = {
     0: "Maligno",
     1: "Benigno"
 }
 
-# OCTMNIST
-oct_labels = {
-    0: "Neovascularização de Coroide",
-    1: "Edema Macular Diabético",
-    2: "Drusas",
-    3: "Normal"
-}
+# =========================
+# Coleta das imagens (4 de cada classe = 8 no total)
+# =========================
+all_images, all_lbls = get_multiple_examples_per_class(breast, breast_labels, num_per_class=4)
+all_titles = [f"BreastMNIST\n{lbl}" for lbl in all_lbls]
 
 # =========================
-# Coleta das imagens
+# Plotagem (Grid 2x4 Completo)
 # =========================
-p_imgs, p_lbls = get_one_example_per_class(pneumonia, pneumonia_labels)
-b_imgs, b_lbls = get_one_example_per_class(breast, breast_labels)
-o_imgs, o_lbls = get_one_example_per_class(octmnist, oct_labels)
-
-# Junta tudo
-all_images = p_imgs + b_imgs + o_imgs
-all_titles = (
-    [f"PneumoniaMNIST\n{lbl}" for lbl in p_lbls] +
-    [f"BreastMNIST\n{lbl}" for lbl in b_lbls] +
-    [f"OCTMNIST\n{lbl}" for lbl in o_lbls]
-)
-
-# =========================
-# Plotagem
-# =========================
-
 rows = 2
 cols = 4
 
 fig, axes = plt.subplots(rows, cols, figsize=(16, 10))
-
 axes = axes.flatten()
 
 for i, ax in enumerate(axes):
@@ -101,7 +74,7 @@ plt.tight_layout()
 # =========================
 # Salvar figura
 # =========================
-output_file = "breastmnist_examples.png"
+output_file = "breast_mnist_8_examples.png"
 
 plt.savefig(output_file, dpi=300, bbox_inches='tight')
 plt.show()
