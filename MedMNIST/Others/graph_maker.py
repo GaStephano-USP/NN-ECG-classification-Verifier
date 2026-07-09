@@ -85,7 +85,96 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             ax.set_ylabel("Porcentagem de propriedades seguras")   
         ax.set_title ("Robustez aplicando 'Salt and Pepper'")
         ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
+
+    if (mode == 'SnP_proporções'):
+        print(path)
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
+            snp_0 = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_50.txt") as f:
+            snp_50 = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_100.txt") as f:
+            snp_100 = [float(line.strip()[:-1]) for line in f]
+        fig, ax = plt.subplots(figsize=(10,5)) 
+        if mm != None:
+            snp_arr1 = np.array(snp_0)
+            snp_arr2 = np.array(snp_50)
+            snp_arr3 = np.array(snp_100)
+            snp_smooth_0 = uniform_filter1d(snp_arr1, size=mm, mode='nearest')
+            snp_smooth_50 = uniform_filter1d(snp_arr2, size=mm, mode='nearest')
+            snp_smooth_100 = uniform_filter1d(snp_arr3, size=mm, mode='nearest')            
+            x = [i for i in range(len(snp_smooth_0))]
+            ax.plot(x, snp_smooth_0, label="Proporção 0%", ls="--", lw="2")
+            ax.plot(x, snp_smooth_50, label="Proporção 50%", ls="-", lw="2")
+            ax.plot(x, snp_smooth_100, label="Proporção 100%", ls=":", lw="2")       
+            ax.set_ylabel(f"Porcentagem de propriedades seguras com média móvel {mm}")
+            ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0.5, 0.47, 0.45))
+        else:
+            x = [i for i in range(k)]
+            ax.plot(x, snp)
+            ax.set_ylabel("Porcentagem de propriedades seguras")   
+        ax.set_title ("Robustez aplicando 'Salt and Pepper BreastMNIST CNN'")
+        ax.set_xlabel(f"Quantidade de pixels perturbados com diferentes proporções")
         
+    if (mode == 'SnP_3'):
+        print(path)
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
+            snp_pneumo = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/OCTMNIST/CNN/REFEITO_resultadosoctmnist_SnP0.txt") as f:
+            snp_oct = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0.txt") as f:
+            snp_breast = [float(line.strip()[:-1]) for line in f]
+        fig, ax = plt.subplots(figsize=(10,5)) 
+        if mm != None:
+            snp_arr1 = np.array(snp_pneumo)
+            snp_arr2 = np.array(snp_oct)
+            snp_arr3 = np.array(snp_breast)
+            snp_smooth_pneumo = uniform_filter1d(snp_arr1, size=mm, mode='nearest')
+            snp_smooth_oct = uniform_filter1d(snp_arr2, size=mm, mode='nearest')
+            snp_smooth_breast = uniform_filter1d(snp_arr3, size=mm, mode='nearest')            
+            print(snp_smooth_pneumo)
+            print(snp_smooth_oct)
+            print(snp_smooth_breast)
+            x = [i for i in range(len(snp_smooth_pneumo))]
+            ax.plot(x, snp_smooth_pneumo, label="PneumoniaMNIST", ls="--", lw="2")
+            ax.plot(x, snp_smooth_oct, label="OCTMNIST", ls="-", lw="2")
+            ax.plot(x, snp_smooth_breast, label="BreastMNIST", ls=":", lw="2")       
+            ax.set_ylabel(f"Porcentagem de propriedades seguras com média móvel {mm}")
+            ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0.5, 0.47, 0.45))
+        else:
+            x = [i for i in range(k)]
+            ax.plot(x, snp)
+            ax.set_ylabel("Porcentagem de propriedades seguras")   
+        ax.set_title ("Robustez aplicando 'Salt and Pepper'")
+        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
+        
+
+    if (mode == 'SnP_seeds'):
+        print(path)
+        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0.txt") as f:
+            snp_1 = [float(line.strip()[:-1]) for line in f]
+        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0_seed2.txt") as f:
+            snp_2 = [float(line.strip()[:-1]) for line in f]
+       
+        fig, ax = plt.subplots(figsize=(10,5)) 
+        if mm != None:
+            snp_arr1 = np.array(snp_1)
+            snp_arr2 = np.array(snp_2)
+            snp_1 = uniform_filter1d(snp_arr1, size=mm, mode='nearest')
+            snp_2 = uniform_filter1d(snp_arr2, size=mm, mode='nearest')
+            x = [i for i in range(len(snp_1))]
+            ax.plot(x, snp_1, label="Seed 1", ls="--", lw="2")
+            ax.plot(x, snp_2, label="Seed 2", ls="-", lw="2")
+
+            ax.set_ylabel(f"Porcentagem de propriedades seguras com média móvel {mm}")
+            ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0.5, 0.47, 0.45))
+        else:
+            x = [i for i in range(k)]
+            ax.plot(x, snp)
+            ax.set_ylabel("Porcentagem de propriedades seguras")   
+        ax.set_title ("Robustez aplicando 'Salt and Pepper' com diferentes Seeds - BreastMNIST")
+        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
+
+
 
     if (mode == 'Rot'):
         with open(path) as f:
@@ -102,18 +191,21 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
         ax.set_ylabel("Porcentagem de propriedades seguras", fontsize="14")
     
     if (mode == '3Rot'):
-        with open("results/outputs/BreastMNIST/resultadosbreastRot.txt") as f:
+        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_Rot.txt") as f:
             rot1 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/PneumoniaMNIST/resultadospneumomnist_Rot_05.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_Rot_max.txt") as f:
             rot2 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_Rot.txt") as f:
+        with open("results/outputs/OCTMNIST/CNN/REFEITO_resultadosoctmnist_Rot.txt") as f:
             rot3 = [float(line.strip()[:-1]) for line in f]
         x1 = [0.5*i for i in range(2*int(angle))]
         x2 = [4*i for i in range (int(angle/4))]
+        x = [i for i in range(len(rot1))]
+        x = np.array(x)
+        x = 4*x
         fig, ax = plt.subplots(figsize=(10,5)) 
-        ax.plot(x1, rot1, label="BreastMNIST", ls=":", lw="2")
-        ax.plot(x1, rot2, label="PneumoniaMNIST", ls="--", lw="2")
-        ax.plot(x2, rot3, label="OCTMNIST", ls="-", lw="2")
+        ax.plot(x, rot1, label="BreastMNIST", ls=":", lw="2")
+        ax.plot(x, rot2, label="PneumoniaMNIST", ls="--", lw="2")
+        ax.plot(x, rot3, label="OCTMNIST", ls="-", lw="2")
         ax.set_title ("Robustez Rotacionando a Imagem")
         ax.set_xlabel(f"Ângulo de rotação")
         ax.set_ylabel("Porcentagem de propriedades seguras")
