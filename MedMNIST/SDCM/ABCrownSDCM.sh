@@ -1,14 +1,14 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.14
-LIMIT=360
+LIMIT=784
 K=0
 SEED=1974
-MODE='Rot'
+MODE='SnP'
 P0x=0
 P0y=0
 ANGLE=0
-OUTPUT_FILE="results/outputs/BreastMNIST/CNN/resultadosbreast_Rot.txt"
+OUTPUT_FILE="results/outputs/BreastMNIST/FC/resultadosbreast_SnP_50.txt"
 > "$OUTPUT_FILE"
 start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
@@ -25,8 +25,8 @@ if [ "$MODE" == 'rel_abs' ]; then
 elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDCM/VNNLIBmakerBreastMNIST.py --k $K --mode "SnP" --p 0 --seed $SEED --model CNN  --model_path ./trained_models/BreastMNIST/CNN/BreastMNISTCNN3_Max.pth 
-        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_BreastMNIST.yaml)
+        python3 ./MedMNIST/SDCM/VNNLIBmakerBreastMNIST.py --k $K --mode "SnP" --p 50 --seed $SEED --model FC  --model_path trained_models/BreastMNIST/FC/BreastMNISTFC.pth 
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/BreastMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
         K="$(bc <<< "$K + 1")"

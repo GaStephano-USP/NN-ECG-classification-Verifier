@@ -112,16 +112,16 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             x = [i for i in range(k)]
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
-        ax.set_title ("Robustez aplicando 'Salt and Pepper BreastMNIST CNN'")
+        ax.set_title ("Robustez aplicando 'Salt and Pepper' PneumoniaMNIST CNN")
         ax.set_xlabel(f"Quantidade de pixels perturbados com diferentes proporções")
         
     if (mode == 'SnP_3'):
         print(path)
-        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_AllP_seed1.txt") as f:
             snp_pneumo = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/OCTMNIST/CNN/REFEITO_resultadosoctmnist_SnP0.txt") as f:
+        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_SnP0.txt") as f:
             snp_oct = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0.txt") as f:
+        with open("results/outputs/BreastMNIST/FC/resultadosbreastSnP_allP.txt") as f:
             snp_breast = [float(line.strip()[:-1]) for line in f]
         fig, ax = plt.subplots(figsize=(10,5)) 
         if mm != None:
@@ -144,15 +144,15 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             x = [i for i in range(k)]
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
-        ax.set_title ("Robustez aplicando 'Salt and Pepper'")
-        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
+        ax.set_title ("Robustez aplicando 'Salt and Pepper' FC")
+        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção 0%")
         
 
     if (mode == 'SnP_seeds'):
         print(path)
-        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
             snp_1 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0_seed2.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnistSnP0_seed2.txt") as f:
             snp_2 = [float(line.strip()[:-1]) for line in f]
        
         fig, ax = plt.subplots(figsize=(10,5)) 
@@ -172,7 +172,7 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
         ax.set_title ("Robustez aplicando 'Salt and Pepper' com diferentes Seeds - BreastMNIST")
-        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção {p}%")
+        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção 0%")
 
 
 

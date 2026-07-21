@@ -12,9 +12,9 @@ general:
   csv_name: all_instances.csv
 model: 
   # name of the model (provided by library, see above)
-  name: BreastMNIST
+  name: BreastMNIST_FC
   # Load pretrained model from this specified path.
-  path: ./BreastMNISTResNet.pth
+  path: ./trained_models/BreastMNIST/FC/BreastMNISTFC.pth
   input_shape: [-1, 1, 28, 28]
 
 solver:

@@ -141,7 +141,7 @@ ax[1].set_title(f"Accuracy Curve (batch_size={batch_size}, lr={lr})")
 ax[1].set_xlabel("Epochs")
 ax[1].set_ylabel("Accuracy")
 ax[1].legend(["Trainamento", "Validação"])
-fig.savefig("MedMNIST/SDCM/BreastMNISTResNet18/grafico.png")
+fig.savefig("MedMNIST/SDCM/BreastMNISTFC/grafico.png")
 model.eval()
 for inputs, labels in test_loader:
                 outputs = model(inputs)
@@ -154,4 +154,4 @@ for inputs, labels in test_loader:
                 total_test += labels.numel()
 acc_test = correct_test/total_test
 print(f"ACC Test {acc_test}")
-torch.save(model.state_dict(), "./BreastMNISTResNet.pth")  # Save the model state
+torch.save(model.state_dict(), "./trained_models/BreastMNIST/FC/BreastMNISTFC.pth")  # Save the model state
