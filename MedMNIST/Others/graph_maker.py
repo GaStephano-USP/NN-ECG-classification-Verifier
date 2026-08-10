@@ -88,11 +88,11 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
 
     if (mode == 'SnP_proporções'):
         print(path)
-        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_AllP_seed2.txt") as f:
             snp_0 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_50.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_50_pt2.txt") as f:
             snp_50 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_100.txt") as f:
+        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_SnP100.txt") as f:
             snp_100 = [float(line.strip()[:-1]) for line in f]
         fig, ax = plt.subplots(figsize=(10,5)) 
         if mm != None:
@@ -112,7 +112,7 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             x = [i for i in range(k)]
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
-        ax.set_title ("Robustez aplicando 'Salt and Pepper' PneumoniaMNIST CNN")
+        ax.set_title ("Robustez aplicando 'Salt and Pepper' OCTMNIS FC")
         ax.set_xlabel(f"Quantidade de pixels perturbados com diferentes proporções")
         
     if (mode == 'SnP_3'):

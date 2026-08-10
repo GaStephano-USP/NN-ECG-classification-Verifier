@@ -2,12 +2,12 @@
 COUNT=0
 EPSILON=0.000
 LIMIT=784
-K=0
+K=575
 MODE="SnP"
 P0x=0
 P0y=0
 SEED=60601
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_SnP_0_pt2.txt"
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_SnP_100_pt2.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
