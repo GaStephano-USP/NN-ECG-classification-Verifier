@@ -51,18 +51,18 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
         ax.legend(fontsize="16")
 
     if (mode == 'abs_rel'):
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/BreastMNIST/resultadosbreastabsupto60.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_abs.txt") as f:
             abs = [float(line.strip()[:-1]) for line in f]
-        with open("/home/stephano/snap/snapd-desktop-integration/current/Ana/NN-ECG-classification-Verifier/results/outputs/BreastMNIST/resultadosbreastRELall.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_rel.txt") as f:
             rel = [float(line.strip()[:-1]) for line in f]
         abs.extend([0.0] * (len(rel) - len(abs)))
         epsilon = [ i / 1000 for i in range(len(rel))]
         fig, ax = plt.subplots(figsize=(10,5))
         plt.rcParams['font.family'] = 'serif'
         plt.rcParams['font.serif'] = ['Liberation Serif']
-        ax.plot(epsilon, abs, label="Robustez Absoluta - BreastMNIST", ls="-", lw="2")
-        ax.plot(epsilon, rel, label="Robustez Relativa - BreastMNIST", ls="--", lw="2")
-        ax.set_title ("Robustez em Relação a Perturbações Locais - BreastMNIST", fontsize="16")
+        ax.plot(epsilon, abs, label="Robustez Absoluta - PneumoniaMNIST", ls="-", lw="2")
+        ax.plot(epsilon, rel, label="Robustez Relativa - PneumoniaMNIST", ls="--", lw="2")
+        ax.set_title ("Robustez em Relação a Perturbações Locais - PneumoniaMNIST", fontsize="16")
         ax.set_xlabel("Epsilon", fontsize="14")
         ax.set_ylabel("Porcentagem de Propriedades Seguras", fontsize="14")
         ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
@@ -88,11 +88,11 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
 
     if (mode == 'SnP_proporções'):
         print(path)
-        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_AllP_seed2.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_0_seed1.txt") as f:
             snp_0 = [float(line.strip()[:-1]) for line in f]
         with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_50_pt2.txt") as f:
             snp_50 = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_SnP100.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_100.txt") as f:
             snp_100 = [float(line.strip()[:-1]) for line in f]
         fig, ax = plt.subplots(figsize=(10,5)) 
         if mm != None:
@@ -112,16 +112,16 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             x = [i for i in range(k)]
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
-        ax.set_title ("Robustez aplicando 'Salt and Pepper' OCTMNIS FC")
+        ax.set_title ("Robustez aplicando 'Salt and Pepper' PneumoniaMNIST FC")
         ax.set_xlabel(f"Quantidade de pixels perturbados com diferentes proporções")
         
     if (mode == 'SnP_3'):
         print(path)
-        with open("results/outputs/PneumoniaMNIST/FC/resultadospneumomnist_SnP_AllP_seed1.txt") as f:
+        with open("results/outputs/PneumoniaMNIST/CNN/resultadospneumomnist_SnP_max_0.txt") as f:
             snp_pneumo = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/OCTMNIST/FC/REFEITO_resultadosoctmnist_SnP0.txt") as f:
+        with open("results/outputs/OCTMNIST/CNN/REFEITO_resultadosoctmnist_SnP0.txt") as f:
             snp_oct = [float(line.strip()[:-1]) for line in f]
-        with open("results/outputs/BreastMNIST/FC/resultadosbreastSnP_allP.txt") as f:
+        with open("results/outputs/BreastMNIST/CNN/resultadosbreast_SnP_0.txt") as f:
             snp_breast = [float(line.strip()[:-1]) for line in f]
         fig, ax = plt.subplots(figsize=(10,5)) 
         if mm != None:
@@ -138,14 +138,14 @@ def draw_graph(mode, path, output_path, k, p, angle, mm):
             ax.plot(x, snp_smooth_pneumo, label="PneumoniaMNIST", ls="--", lw="2")
             ax.plot(x, snp_smooth_oct, label="OCTMNIST", ls="-", lw="2")
             ax.plot(x, snp_smooth_breast, label="BreastMNIST", ls=":", lw="2")       
-            ax.set_ylabel(f"Porcentagem de propriedades seguras com média móvel {mm}")
+            ax.set_ylabel(f"Percentage of safe properties with moving average {mm}")
             ax.legend(fontsize="12", loc='best', bbox_to_anchor=(0.5, 0.5, 0.47, 0.45))
         else:
             x = [i for i in range(k)]
             ax.plot(x, snp)
             ax.set_ylabel("Porcentagem de propriedades seguras")   
-        ax.set_title ("Robustez aplicando 'Salt and Pepper' FC")
-        ax.set_xlabel(f"Quantidade de pixels perturbados com proporção 0%")
+        ax.set_title ("Robustness Applying 'Salt and Pepper' in CNNs")
+        ax.set_xlabel(f"Number of perturbed pixels with 0% proportion")
         
 
     if (mode == 'SnP_seeds'):

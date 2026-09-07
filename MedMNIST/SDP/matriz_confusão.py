@@ -22,7 +22,36 @@ class FullyConnected(nn.Module):  # herança corrigida para o seu modelo do Pneu
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
+    
+class PneumoniaMNISTCNN(nn.Module):
+    def __init__(self, num_classes=1):
+        super().__init__()
 
+        # (1) Convolutional layer
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
+
+        # (2) MaxPooling layer
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)  # 28x28 -> 7x7
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)  # 14x14 -> 7x7
+
+        # (10) Output layer
+        self.out = nn.Linear(64 * 7 * 7, num_classes)
+
+    def forward(self, x):
+        # Conv + Pool
+        x = F.relu(self.conv1(x))
+        x = self.pool(x)
+
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = self.pool2(x)
+
+        # Flatten
+        x = torch.flatten(x, start_dim=1)
+
+        return self.out(x)
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -59,14 +88,20 @@ def plot_confusion_matrix(cm, classes,
 
 def main():
     parser = argparse.ArgumentParser(description='Avaliação do modelo PneumoMNIST com matriz de confusão')
+    parser.add_argument('--model', type=str, default='CNN', help='Tipo do modelo')
     parser.add_argument('--model_path', type=str, required=True, help='Caminho do arquivo .pth (Ex: ./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth)')
     parser.add_argument('--output_path', type=str, default='matriz_confusao_pneumo.png', help='Caminho para salvar a imagem da matriz')
     args = parser.parse_args()    
 
     device = torch.device('cpu')
 
-    # Instancia o modelo conforme as configurações do PneumoMNISTFCnet (Input: 784, Output: 1, Hidden: 50)
-    model = FullyConnected(input_size=784, num_classes=1, hidden_size=50).to(device)
+    if args.model == 'CNN':
+            model = PneumoniaMNISTCNN().to(device)
+    elif args.model == 'FC':
+            model = FullyConnected(input_size=784, num_classes=1, hidden_size=50).to(device)
+    else:
+            raise ValueError(f"Modelo '{args.model}' inválido. Use 'CNN' ou 'FC'.")
+
     
     model.load_state_dict(torch.load(args.model_path, map_location=device))
     model.eval()
@@ -124,7 +159,7 @@ def main():
     plot_confusion_matrix(cm, classes, normalize=False, title='Matriz de Confusão — PneumoniaMNIST')
     
     if args.output_path:
-        plt.savefig(args.output_path)
+        plt.savefig(args.output_path, bbox_inches='tight')
         print(f"Matriz de confusão salva em: {args.output_path}")
     else:
         plt.show()

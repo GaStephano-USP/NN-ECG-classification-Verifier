@@ -6,13 +6,13 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
 
 #  from model_antes import ResNet18
-from model_avg_3 import PneumoniaMNISTCNN
+from model_max_3 import PneumoniaMNISTCNN
 from medmnist import PneumoniaMNIST
 from medmnist import INFO
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
-epochs = 150
+epochs = 100
 lr = 0.0001
 
 
@@ -135,7 +135,7 @@ ax[1].set_title(f"Accuracy Curve (batch_size={batch_size}, lr={lr})")
 ax[1].set_xlabel("Epochs")
 ax[1].set_ylabel("Accuracy")
 ax[1].legend(["Trainamento", "Validação"])
-fig.savefig("MedMNIST/SDP/PneumoniaMNISTCNN/grafico3_avg.png")
+fig.savefig("MedMNIST/SDP/PneumoniaMNISTCNN/grafico3_max.png")
 model.eval()
 for inputs, labels in test_loader:
                 outputs = model(inputs)
@@ -148,4 +148,4 @@ for inputs, labels in test_loader:
                 total_test += labels.numel()
 acc_test = correct_test/total_test
 print(f"ACC Test {acc_test}")
-torch.save(model.state_dict(), "./trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_avg.pth")  # Save the model state
+torch.save(model.state_dict(), "./trained_models/PneumoniaMNIST/CNN/PneumoniaMNISTCNN3_max.pth")  # Save the model state

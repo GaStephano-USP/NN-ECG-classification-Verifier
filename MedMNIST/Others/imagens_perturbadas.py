@@ -99,12 +99,15 @@ o_imgs, o_lbls = get_one_example_per_class(
     octmnist, oct_labels,
     transform_fn=lambda img: snp(img, k=200, p=50, seed=1950)
 )
+#o_lbls = ["Choroidal Neo.", "Normal", "Macular Ed.", "Drusen"]
+o_lbls = ["Neo. Coroidal", "Normal", "Ed. Macular", "Drusas"]
+#b_lbls = ["Benign", "Malignant"]
 
 all_images = p_imgs + b_imgs + o_imgs
 all_titles = (
-    [f"PneumoniaMNIST\n{lbl}\n(Recorte 3×3)" for lbl in p_lbls] +
-    [f"BreastMNIST\n{lbl}\n(Rotação 45°)"    for lbl in b_lbls] +
-    [f"OCTMNIST\n{lbl}\n(Salt and Pepper)"    for lbl in o_lbls]
+    [f"PneumoniaMNIST {lbl}\n(Recorte 3×3)" for lbl in p_lbls] +
+    [f"BreastMNIST {lbl}\n(Rotação 45°)"    for lbl in b_lbls] +
+    [f"OCTMNIST {lbl}\n(Salt and Pepper)"    for lbl in o_lbls]
 )
 
 # =========================
@@ -116,12 +119,12 @@ axes = axes.flatten()
 for i, ax in enumerate(axes):
     img = all_images[i].squeeze().numpy()
     ax.imshow(img, cmap='gray')
-    ax.set_title(all_titles[i], fontsize=14, fontweight='bold')
+    ax.set_title(all_titles[i], fontsize=18, fontweight='bold')
     ax.axis('off')
 
 plt.tight_layout()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-plt.savefig("imagens_perturbadas.png", dpi=300, bbox_inches='tight')
+plt.savefig("./MedMNIST/Others/imagens_perturbadas.png", dpi=300, bbox_inches='tight')
 plt.show()
 print(f"Imagem salva")

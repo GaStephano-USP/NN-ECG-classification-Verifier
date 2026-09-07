@@ -26,7 +26,7 @@ elif [ "$MODE" == "SnP" ]; then
 
     while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
         echo $K
-        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 0 --model FC --model_path ./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth
+        python3 ./MedMNIST/SDP/VNNLIBmakerPneumonia.py --k $K --mode "SnP" --seed $SEED --p 100 --model FC --model_path ./trained_models/PneumoniaMNIST/PnuemoniaMNISTFCNet.pth
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST) # --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
