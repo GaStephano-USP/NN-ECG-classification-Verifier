@@ -51,15 +51,15 @@ pneumonia_labels = {
 
 # BreastMNIST
 breast_labels = {
-    0: "Maligno",
-    1: "Benigno"
+    0: "Malignant",
+    1: "Benign"
 }
 
 # OCTMNIST
 oct_labels = {
-    0: "Neovascularização de Coroide",
-    1: "Edema Macular Diabético",
-    2: "Drusas",
+    0: "Choroidal Neovascularization",
+    1: "Diabetic Macular Edema",
+    2: "Drusen",
     3: "Normal"
 }
 
@@ -91,9 +91,10 @@ axes = axes.flatten()
 
 for i, ax in enumerate(axes):
     img = all_images[i].squeeze().numpy()
-
+    plt.rcParams['font.family'] = 'serif'
+    plt.rcParams['font.serif'] = ['Liberation Serif']
     ax.imshow(img, cmap='gray')
-    ax.set_title(all_titles[i], fontsize=20, fontweight='bold')
+    ax.set_title(all_titles[i], fontsize=22, fontweight='bold')
     ax.axis('off')
 
 plt.tight_layout()
@@ -101,7 +102,7 @@ plt.tight_layout()
 # =========================
 # Salvar figura
 # =========================
-output_file = "breastmnist_examples.png"
+output_file = "mnist_examples.png"
 
 plt.savefig(output_file, dpi=300, bbox_inches='tight')
 plt.show()
