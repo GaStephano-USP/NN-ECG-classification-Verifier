@@ -1,13 +1,13 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.000
-LIMIT=784
-K=575
-MODE="SnP"
+LIMIT=0.3
+K=0
+MODE="CompareCNN"
 P0x=0
 P0y=0
 SEED=60601
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/resultadospneumomnist_SnP_100_pt2.txt"
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/Compare/PneumoniaMNISTCNN_Compare_rel.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
@@ -53,6 +53,26 @@ elif [ "$MODE" == "Crop" ]; then
             P0x="$(bc <<< "$P0x + 1")"  
         done
         P0y="$(bc <<< "$P0y + 1")"
+    done
+elif [ "$MODE" == "Compare" ]; then
+
+    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
+        echo $EPSILON
+        python3 ./MedMNIST/SDP/CompareFCandCNN.py --epsilon $EPSILON --mode "rel" --seed $SEED
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST) # --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
+        match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+        echo "$match" >> "$OUTPUT_FILE"
+        EPSILON="$(bc <<< "$EPSILON + 0.001")"
+    done
+elif [ "$MODE" == "CompareCNN" ]; then
+
+    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
+        echo $EPSILON
+        python3 ./MedMNIST/SDP/CompareFCandCNN.py --epsilon $EPSILON --mode "rel" --seed $SEED
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml) # --config ./safety_configs/FC_pneumoniaMNIST.yaml)
+        match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+        echo "$match" >> "$OUTPUT_FILE"
+        EPSILON="$(bc <<< "$EPSILON + 0.001")"
     done
 fi
 end=`date +%s`
