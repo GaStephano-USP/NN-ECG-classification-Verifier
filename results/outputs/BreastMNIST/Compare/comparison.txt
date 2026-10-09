@@ -1,0 +1,3 @@
+Erros da Rede FC: 4
+Erros da Rede CNN: 16
+Erros das duas Redes: 20

@@ -1,14 +1,14 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.00
-LIMIT=0.300
-K=0
+LIMIT=784
+K=698
 SEED=60601
 P0x=0
 P0y=0
 MODE='CompareCNN'
 ANGLE=0
-OUTPUT_FILE="results/outputs/OCTMNIST/Compare/OCTMNISTCNNrel.txt"
+OUTPUT_FILE="results/outputs/OCTMNIST/Compare/OCTMNISTCNNSnP0_2.txt"
 > "$OUTPUT_FILE"
 start=`date +%s`
 if [ "$MODE" == 'rel_abs' ]; then
@@ -55,22 +55,22 @@ elif [ "$MODE" == "Crop" ]; then
         P0y="$(bc <<< "$P0y + 1")"
     done
 elif [ "$MODE" == 'Compare' ]; then
-    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDPR/CompareFCandCNN.py --epsilon $EPSILON --mode "rel"
+    while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
+        python3 ./MedMNIST/SDPR/CompareFCandCNN.py --k $K --mode "SnP" --seed $SEED --p 0
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        EPSILON="$(bc <<< "$EPSILON + 0.001")"
-        echo $EPSILON
+        K="$(bc <<< "$K + 1")"
+        echo $K
     done
 elif [ "$MODE" == 'CompareCNN' ]; then
-    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        python3 ./MedMNIST/SDPR/CompareFCandCNN.py --epsilon $EPSILON --mode "rel"
+    while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
+        python3 ./MedMNIST/SDPR/CompareFCandCNN.py --k $K --mode "SnP" --seed $SEED --p 0
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/OCTMNIST_CNN.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        EPSILON="$(bc <<< "$EPSILON + 0.001")"
-        echo $EPSILON
+        K="$(bc <<< "$K + 1")"
+        echo $K
     done 
 fi
 end=`date +%s`

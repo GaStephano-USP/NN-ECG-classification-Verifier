@@ -1,13 +1,14 @@
 #!/bin/bash
 COUNT=0
 EPSILON=0.000
-LIMIT=0.3
+LIMIT=360
 K=0
-MODE="CompareCNN"
+MODE="CompareRot"
 P0x=0
 P0y=0
 SEED=60601
-OUTPUT_FILE="results/outputs/PneumoniaMNIST/Compare/PneumoniaMNISTCNN_Compare_rel.txt"
+OUTPUT_FILE="results/outputs/PneumoniaMNIST/Compare/PneumoniaMNISTCNN_CompareRot.txt"
+OUTPUT_FILE_FC="results/outputs/PneumoniaMNIST/Compare/PneumoniaMNISTFC_CompareRot.txt"
 ANGLE=0
 > "$OUTPUT_FILE"
 start=`date +%s`
@@ -56,23 +57,36 @@ elif [ "$MODE" == "Crop" ]; then
     done
 elif [ "$MODE" == "Compare" ]; then
 
-    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        echo $EPSILON
-        python3 ./MedMNIST/SDP/CompareFCandCNN.py --epsilon $EPSILON --mode "rel" --seed $SEED
+    while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
+        echo $K
+        python3 ./MedMNIST/SDP/CompareFCandCNN.py --k $K --mode "SnP" --p 0 --seed $SEED
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml --model PneumoniaMNIST) # --config ./safety_configs/CNN_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        EPSILON="$(bc <<< "$EPSILON + 0.001")"
+        K="$(bc <<< "$K + 1")"
     done
 elif [ "$MODE" == "CompareCNN" ]; then
 
-    while [ "$(bc <<< "$EPSILON < $LIMIT")" == "1" ]; do
-        echo $EPSILON
-        python3 ./MedMNIST/SDP/CompareFCandCNN.py --epsilon $EPSILON --mode "rel" --seed $SEED
+    while [ "$(bc <<< "$K < $LIMIT")" == "1" ]; do
+        echo $K
+        python3 ./MedMNIST/SDP/CompareFCandCNN.py --k $K --mode "SnP" --seed $SEED
         output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml) # --config ./safety_configs/FC_pneumoniaMNIST.yaml)
         match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
         echo "$match" >> "$OUTPUT_FILE"
-        EPSILON="$(bc <<< "$EPSILON + 0.001")"
+        K="$(bc <<< "$K + 1")"
+    done
+elif [ "$MODE" == "CompareRot" ]; then
+
+    while [ "$(bc <<< "$ANGLE < $LIMIT")" == "1" ]; do
+        echo $ANGLE
+        python3 ./MedMNIST/SDP/CompareFCandCNN.py --angle $ANGLE --mode "Rot" --seed $SEED
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/CNN_pneumoniaMNIST.yaml) # --config ./safety_configs/FC_pneumoniaMNIST.yaml)
+        match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+        echo "$match" >> "$OUTPUT_FILE"
+        output=$(python3 ../abcrown_safety/alpha-beta-CROWN/complete_verifier/abcrown.py --config ./safety_configs/FC_pneumoniaMNIST.yaml) # --config ./safety_configs/FC_pneumoniaMNIST.yaml)
+        match=$(echo "$output" | grep -Eo '[0-9]+(\.[0-9]+)?%')
+        echo "$match" >> "$OUTPUT_FILE_FC"
+        ANGLE="$(bc <<< "$ANGLE + 4")"
     done
 fi
 end=`date +%s`

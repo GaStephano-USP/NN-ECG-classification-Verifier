@@ -81,7 +81,16 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
     dataset = DataClass(split='test', transform=transform, download=True)
     iterator = 0
     folder_path_delete = "./safety_benchmarks/benchmarks/OCTMNIST/vnnlib"
-    compiled_files = glob.glob(os.path.join(folder_path_delete, "*.vnnlib.compiled"))
+    compiled_files = glob.glob(os.path.join(folder_path_delete, "*.vnnlib*"))
+    #print('tamanho', len(dataset))
+    for file_path in compiled_files:
+        try:
+            os.remove(file_path)
+            #print(f"Deletado: {file_path}")
+        except Exception as e:
+            print(f"Erro ao deletar {file_path}: {e}")
+    folder_path_delete = "./safety_benchmarks/benchmarks/OCTMNIST/"
+    compiled_files = glob.glob(os.path.join(folder_path_delete, "*.csv"))
     #print('tamanho', len(dataset))
     for file_path in compiled_files:
         try:
@@ -140,7 +149,7 @@ def process_network(epsilon, mode, k, p, altura, largura, P0, seed, pixels, angl
             predictedFC = torch.argmax(outputFC, dim=1).item()
             predictedCNN = torch.argmax(outputCNN, dim=1).item()
             #print('predicted:', predicted, 'prob:', probFC.item(), 'label:', label, 'sample:', str(i))
-        if (predictedFC == label and predictedCNN == label):
+        if ((predictedFC == label) and (predictedCNN == label)):
             if epsilon == None:
                 epsilon = default_epsilon
 
